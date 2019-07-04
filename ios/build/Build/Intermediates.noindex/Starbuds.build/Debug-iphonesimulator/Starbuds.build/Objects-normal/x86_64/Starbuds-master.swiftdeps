@@ -1,0 +1,5 @@
+version: "Apple Swift version 4.2.1 (swiftlang-1000.11.42 clang-1000.11.45.1)"
+options: "23c442076ac87fcb7db81a04d2bfdab0"
+build_time: [1559477644, 781582000]
+inputs:
+  "/Users/macbook/Desktop/Starbuds-REACT-App/ios/VideoCroppingManager.swift": [1550923748, 0]

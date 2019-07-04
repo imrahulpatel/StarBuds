@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>9</integer>
+	<key>logs</key>
+	<dict>
+		<key>366620C1-FCB8-4216-A3CD-1E3E89D621DA</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>366620C1-FCB8-4216-A3CD-1E3E89D621DA.xcactivitylog</string>
+			<key>highLevelStatus</key>
+			<string>E</string>
+			<key>schemeIdentifier-containerName</key>
+			<string>Starbuds project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Starbuds</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building workspace Starbuds with scheme Starbuds and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>574496191.59649301</real>
+			<key>timeStoppedRecording</key>
+			<real>574496206.01120198</real>
+			<key>title</key>
+			<string>Building workspace Starbuds with scheme Starbuds and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>366620C1-FCB8-4216-A3CD-1E3E89D621DA</string>
+		</dict>
+		<key>E0DF97E5-85BE-4E48-9380-4F003400409B</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>E0DF97E5-85BE-4E48-9380-4F003400409B.xcactivitylog</string>
+			<key>highLevelStatus</key>
+			<string>E</string>
+			<key>schemeIdentifier-containerName</key>
+			<string>Starbuds project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Starbuds</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Building workspace Starbuds with scheme Starbuds and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>574440766.19005895</real>
+			<key>timeStoppedRecording</key>
+			<real>574440775.62191105</real>
+			<key>title</key>
+			<string>Building workspace Starbuds with scheme Starbuds and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>E0DF97E5-85BE-4E48-9380-4F003400409B</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

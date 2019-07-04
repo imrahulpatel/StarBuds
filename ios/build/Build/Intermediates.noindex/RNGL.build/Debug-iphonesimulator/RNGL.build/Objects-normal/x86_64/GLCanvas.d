@@ -1,0 +1,35 @@
+dependencies: \
+  /Users/macbook/Desktop/Starbuds-REACT-App/node_modules/gl-react-native/ios/GLCanvas.m \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridge.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeDelegate.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTJavaScriptLoader.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTDefines.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTFrameUpdate.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTUtils.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAssert.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTConvert.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAnimationType.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBorderStyle.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTLog.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTPointerEvents.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTEventDispatcher.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTProfile.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTImageSource.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/node_modules/gl-react-native/ios/RNGLContext.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/node_modules/gl-react-native/ios/GLShader.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/node_modules/gl-react-native/ios/GLFBO.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/node_modules/gl-react-native/ios/GLCanvas.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTComponent.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/node_modules/gl-react-native/ios/GLData.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/node_modules/gl-react-native/ios/CaptureConfig.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/node_modules/gl-react-native/ios/GLTexture.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/node_modules/gl-react-native/ios/GLImageData.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/node_modules/gl-react-native/ios/GLImage.h \
+  /Users/macbook/Desktop/Starbuds-REACT-App/node_modules/gl-react-native/ios/GLRenderData.h \
+  ../../react-native/React/Views/UIView+React.h
