@@ -54,11 +54,13 @@ class SharePostModal extends Component {
     this.searchUsersFromApi();
   }
   showSnackBar = () => {
+    console.log("showSnackBar","=============>")
     let {selectedUserList, searchText, userList} = this.state;
     let selectedUsers = selectedUserList.filter((user)=> user.isSelected && user.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1);
     let firstUsersName = selectedUsers[0].name;
     let selectedUserCount = selectedUsers.length; //userList.reduce((sum,user)=> sum + user.isSelected ? 1 : 0,0);
     asyncEach(selectedUsers,(user,callback)=>{
+      console.log("updateUnreadStatus","=============>")
       this.updateUnreadStatus(this.props.userData._id, user._id,callback);
     },(err)=>{
       let title = '';
@@ -83,6 +85,7 @@ class SharePostModal extends Component {
     });
   }
   updateUnreadStatus = (senderId, receiverId,callback) => {
+    console.log("updateUnreadStatus","=============>"+senderId)
     this.conversationRef
     //.where(`chatID`, '==', this.state.chatID)
     .where(`collaborators.${senderId}._id`, '==', senderId)
@@ -109,14 +112,17 @@ class SharePostModal extends Component {
     });
   }
   sendNotification = (dataObj) => {
-    let headers = {
-      "Content-Type": "application/json",
-      firebaseNotificationKey: Metrics.firebaseNotificationKey //"k5z2fALWstAcg3W23c9ZZKRPKLDBshJM"
-    };
+    console.log("firebaseNotifications","=============>")
+      let headers = {
+        "Content-Type": "application/json",
+        firebaseNotificationKey: Metrics.firebaseNotificationKey //"k5z2fALWstAcg3W23c9ZZKRPKLDBshJM"
+      };
       apiCall('users/firebaseNotifications',dataObj,headers)
       .then(response=>{
+        console.log("firebaseNotifications","====>"+JSON.stringify(response,null,2))
       })
       .catch((err)=>{
+        console.log("sendNotification","====>"+err.message)
       });
   }
 
@@ -133,6 +139,7 @@ class SharePostModal extends Component {
     return new Promise((resolve, reject) => {
       apiCall("users/searchUser", data, headers)
       .then(response => {
+       
         this.setState({
           
           userList: response.result.length ? response.result : []
@@ -160,6 +167,7 @@ class SharePostModal extends Component {
     });
   }
   addSharedMessage = (chatID,receiverId,receiverName) => {
+    console.log("addSharedMessage","=============>")
     return new Promise((resolve,reject)=>{
       const {post} = this.props;
       const image = post.medias[0].mediaType === 2 ? post.medias[0].thumbnail : post.medias[0].mediaUrl;
@@ -189,12 +197,14 @@ class SharePostModal extends Component {
           resolve({status:true}); 
       })
       .catch((error)=>{
+        console.log("addSharedMessage","=============>"+error.message)
       }); 
     });
   }
 
   // this.showSnackBar();
   sendChat = () => {
+    console.log("sendChat","=============>")
     this.props.toggleModalVisibility();
     const {userList, searchText} = this.state;
     let selectedUsers = userList.filter(user=> user.isSelected && user.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1);
@@ -220,11 +230,10 @@ class SharePostModal extends Component {
     });
   }
   addChat = (item,callback) => {
+    console.log("Add Chat=======")
     let otherUserId= item._id;
     let {_id} = this.props.userData;
-
-    //this.props.updateLoading(true);
-
+    
     this.conversationRef
     .where(`collaborators.${_id}._id`, '==', _id)
     .where(`collaborators.${otherUserId}._id`, '==',otherUserId)
@@ -237,7 +246,7 @@ class SharePostModal extends Component {
         conversationObj.timestamp = new Date().getTime();
         conversationObj.collaborators = {
           [_id]: Object.assign({},this.props.userData,{initiator:true}),
-          [otherUserId]: item  //Object.assign({},item,{readStatus: true})
+          [otherUserId]: item 
         };
         this.conversationRef.add(conversationObj)
         .then((docRef)=>{
@@ -256,6 +265,7 @@ class SharePostModal extends Component {
         })
         .catch((error)=>{
           callback(error);
+          console.log("Add Chat","=====Error========>"+error.message)
         });
       } else {
         let chatID = '';
