@@ -239,6 +239,7 @@ class CameraView extends Component {
               this.setState({ cameraImagePath: resUrl, loading: false });
               tempImage.push({
                 uri: resUrl,
+                imageUri: resUrl,
                 filename: "test",
                 width: 500,
                 height: 500,
@@ -258,6 +259,7 @@ class CameraView extends Component {
             this.setState({ cameraImagePath: data.path, loading: false });
             tempImage.push({
               uri: data.path,
+              imageUri:data.path,
               filename: "test",
               width: 500,
               height: 500,

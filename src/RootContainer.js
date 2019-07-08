@@ -54,13 +54,15 @@ class RootContainer extends Component {
   render() {
     return (
       (!this.state.isLoading && 
-        <View style={isIPhoneX() ? Styles.iphoneXWrapper  : { flex: 1 }}>
-          <StatusBar 
-           barStyle="dark-content"
-          // hidden={true} 
-          />
-          <ReduxNavigation />
-        </View>
+       
+          <View style={isIPhoneX() ? Styles.iphoneXWrapper  : { flex: 1 }}>
+            <StatusBar 
+            barStyle="dark-content"
+            // hidden={true} 
+            />
+            <ReduxNavigation />
+          </View>
+        
       )
     );
   }

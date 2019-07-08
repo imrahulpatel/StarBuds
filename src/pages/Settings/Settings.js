@@ -61,6 +61,7 @@ class Settings extends Component {
     super(props);
     this.state = {
       notificationStatus: this.props.userData.notificationEnable,
+      locationStatue:true,
       isLoading: false,
       isUploadingProfileImage: false,
       userData : [], // create an empty array
@@ -140,6 +141,11 @@ class Settings extends Component {
       .catch(error => {
       });
   }
+
+  changeLocationFlag(value){
+    this.setState({ locationStatue: value})
+  }
+
   changeNotificationFlag(value) {
       this.setState({ notificationStatus: value, isLoading: true }, () => {
         const data = {
@@ -254,7 +260,7 @@ class Settings extends Component {
               editable={false}
           style={{fontFamily: 'SFUIText-Regular',fontSize: 16,marginLeft : 0,marginRight : 0,height: 30, borderColor : rgb(13, 14, 21), borderBottomWidth: 0.3,color : rgb(13, 14, 21)}}
           onChangeText={(text) => this.setState({u_birthday:text})}
-          value={Moment(this.state.u_birthday).format("MMM-DD-YYYY")}
+          value={this.state.u_birthday!=null && this.state.u_birthday?Moment(this.state.u_birthday).format("MMM-DD-YYYY"):''}
         />
         </View>
       </View>
@@ -394,23 +400,15 @@ class Settings extends Component {
 
       >
 
-              <Text style={{marginTop : 5,marginLeft : 20,fontFamily: 'SFUIText-Regular',fontSize: 14, color : 'black', width : '82%', height : 25}}>Change Password</Text>
+        <Text style={{marginTop : 5,marginLeft : 20,fontFamily: 'SFUIText-Regular',fontSize: 14, color : 'black', width : '82%', height : 25}}>Change Password</Text>
               <Image
                   style={{marginTop : 9,marginLeft : 15,width: 8, height: 13, alignItems : 'center'}}
                   source={Images.right_arrow}
-              />
+         />
+
        </TouchableOpacity>
       </View>
 
-      {/* <View style={{marginTop : 10, width : '100%',height : 40,borderColor : rgb(13, 14, 21), borderBottomWidth: 0.2}}>
-      <TouchableOpacity style = {{flex: 1, flexDirection: 'row'}}>
-              <Text style={{marginTop : 5,marginLeft : 20,fontFamily: 'SFUIText-Regular',fontSize: 14, color : 'black', width : '82%', height : 25}}>Security</Text>
-              <Image
-                  style={{marginTop : 7,marginLeft : 15,width: 15, height: 15, alignItems : 'center'}}
-                  source={Images.right_arrow}
-              />
-        </TouchableOpacity>
-      </View> */}
     </View>
     )
   }
@@ -423,9 +421,9 @@ class Settings extends Component {
               <Text style={{marginTop : 5,marginLeft : 20,fontFamily: 'SFUIText-Regular',fontSize: 14, color : 'black', width : '75%', height : 25}}>Location</Text>
               <Switch
                 onValueChange={value => {
-                  // this.changeNotificationFlag(value);
+                   this.changeLocationFlag(value);
                 }}
-                value={this.state.notificationStatus}
+                value={this.state.locationStatue}
                 tintColor={"rgb(76, 76, 76)"}
                 onTintColor={Colors.primary}
                 thumbTintColor={Colors.white}
@@ -444,7 +442,7 @@ class Settings extends Component {
                 onTintColor={Colors.primary}
                 thumbTintColor={Colors.white}
                 disabled={this.state.isLoading}
-                backgroundColor = {Colors.dark}
+                 backgroundColor = 'rgba(76, 76, 76,0)'
               />
       </View>
     </View>

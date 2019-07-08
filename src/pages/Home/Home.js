@@ -88,9 +88,10 @@ class Home extends Component {
     });
     DeviceEventEmitter.addListener("refreshHomeFeed", e => {
       console.log("======refreshHomeFeed")
-      setTimeout(function(){
+      setTimeout(()=>{
         this.getPosts(0);
       }, 2000)
+      
 
     });
     DeviceEventEmitter.addListener('scrollHomePageToTop', () => {
@@ -766,7 +767,7 @@ v    });
           defaultSource={Images.placeHolder}
           fallbackSource={Images.placeHolder}
           activityIndicatorProps={{ display: "none", opacity: 0 }}
-          resizeMode={"cover"}
+          resizeMode={"contain"}
         >
           {post.showTag &&
             this.renderTag(
@@ -785,7 +786,7 @@ v    });
           defaultSource={Images.placeHolder}
           fallbackSource={Images.placeHolder}
           activityIndicatorProps={{ display: "none", opacity: 0 }}
-          resizeMode={"cover"}
+          resizeMode={"contain"}
         />
       );
     }

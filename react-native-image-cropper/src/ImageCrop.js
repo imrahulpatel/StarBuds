@@ -232,7 +232,7 @@ class ImageCrop extends Component {
               height: this.state.imageHeight,
               width: this.state.imageWidth
             }}
-            resizeMode="cover"
+            resizeMode="contain"
             zoom={this.state.zoom}
             center={[this.state.centerX, this.state.centerY]}
           />

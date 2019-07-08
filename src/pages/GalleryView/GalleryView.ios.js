@@ -21,7 +21,7 @@ import {
 import { connect } from "react-redux";
 import { TabNavigator, NavigationActions } from "react-navigation";
 import VideoPlayer from "react-native-video-player";
-
+import FImage from "../../components/customeview/FullWidthImage";
 import {
   CameraKitGallery,
   CameraKitGalleryView
@@ -270,9 +270,9 @@ class GalleryView extends Component {
   async onTapImage(event) {
     const isSelected = event.nativeEvent.isSelected;
     const image = await CameraKitGallery.getImageForTapEvent(event.nativeEvent);
-    if (this.state.selectedImages.length > 0) {
+    /* if (this.state.selectedImages.length > 0) {
      await this.cropImage()
-    }
+    } */
     if (
       !isSelected ||
       _.get(image, "selectedImageId") ===
@@ -285,6 +285,9 @@ class GalleryView extends Component {
         return o.selectedImageId == image.selectedImageId
       })
       this.setState({
+        presentedImage: this.state.selectedImagesArray[
+          this.state.selectedImagesArray.length - 1
+        ],
         selectedImagesArray: JSON.parse(JSON.stringify(this.state.selectedImagesArray)),
         selectedImages: JSON.parse(JSON.stringify(this.state.selectedImages)) 
       }, () => {
@@ -294,6 +297,9 @@ class GalleryView extends Component {
       });
     } else if (image) {
       this.setState({
+        presentedImage: this.state.selectedImagesArray[
+          this.state.selectedImagesArray.length - 1
+        ],
         selectedImagesArray: _.concat(this.state.selectedImagesArray, JSON.parse(JSON.stringify(image))),
         selectedImages: _.concat(this.state.selectedImages, JSON.parse(JSON.stringify(image)))
       }, () => {
@@ -382,7 +388,9 @@ class GalleryView extends Component {
                 this.state.selectedImagesArray[
                   this.state.selectedImagesArray.length - 1
                 ].isType == 'image' && (
-                  <ImageCrop
+                  
+                <View style={styles.container}>
+                     <ImageCrop
                     changeScrollValue={this.changeScrollValue}
                     ref={"cropper"}
                     image={
@@ -391,7 +399,7 @@ class GalleryView extends Component {
                       ].imageUri
                       //"http://geekycentral.com/wp-content/uploads/2017/09/react-native.png"
                     }
-                    zoom={0}
+                    //zoom={0}
                     imageHeight={
                       this.state.selectedImagesArray[
                         this.state.selectedImagesArray.length - 1
@@ -404,10 +412,10 @@ class GalleryView extends Component {
                     }
                     cropWidth={Metrics.screenWidth}
                     cropHeight={Metrics.screenWidth}
-                    maxZoom={100}
-                    minZoom={0}
-                    panToMove={true}
-                    pinchToZoom={true}
+                    //maxZoom={100}
+                    //minZoom={0}
+                    //panToMove={true}
+                    //pinchToZoom={true}
                     format={"file"}
                     filePath={
                       RNFetchBlob.fs.dirs.DocumentDir +
@@ -417,7 +425,8 @@ class GalleryView extends Component {
                     }
                     pixelRatio={1}
                     quality={1}
-                  />
+                  /> 
+                  </View>
                 ) || (
                   <VideoPlayer
                     endWithThumbnail
@@ -464,7 +473,7 @@ class GalleryView extends Component {
           unSelectedImageIcon={Images.unSelectedMultipleImages}
           imageStrokeColor={"#ffffff"}
           imageStrokeColorWidth={0.5}
-          remoteDownloadIndicatorType={'progress-pie'} //spinner / progress-bar / progress-pie
+          remoteDownloadIndicatorType={'progress-pie'}
           remoteDownloadIndicatorColor={'white'}
         />
       </ScrollView>

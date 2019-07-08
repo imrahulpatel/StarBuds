@@ -94,10 +94,7 @@ class ChangePassword extends Component {
 
   _handleConnectionChange = (isConnected) => {
     if(isConnected) {
-      this.setState({ isConnected: true }, () => {
-        // this.setState({ isLoading: true });
-        // this.getUserDetailsFromApi();
-      })
+      this.setState({ isConnected: true })
     } else {
       this.setState({ isConnected: false })
     }
@@ -105,7 +102,7 @@ class ChangePassword extends Component {
 
 
   changePasswordApiCall() {
-      this.setState({ notificationStatus: '', isLoading: true }, () => {
+      this.setState({ isLoading: true }, () => {
         const data = {
           id: this.props.userData._id,
           currentPassword: this.state.txtOldPassword,
@@ -119,9 +116,6 @@ class ChangePassword extends Component {
         apiCall("users/Changepassword", data, headers)
           .then(response => {
             if (response.status) {
-              let oldUser = this.props.userData;
-              oldUser.notificationEnable = value;
-              this.props.setUserData(oldUser);
               this.setState({ isLoading: false }, () => {
                 alert('Success', response.message);
               });
@@ -133,7 +127,7 @@ class ChangePassword extends Component {
           })
           .catch(error => {
             this.setState({ isLoading: false }, () => {
-              alert("Failed", 'Failed to update password.');
+              alert("Failed", 'Failed to update password.'+error.message);
             });
           });
       });      

@@ -361,7 +361,7 @@ class AddCaptionModal extends Component {
             <View style={AddCaptionModalStyle.selectedPhotoContainer}>
               <Image
                 source={{
-                  uri: this.props.navigation.state.params.selectedImages[0].uri
+                  uri: this.props.navigation.state.params.selectedImages[0].imageUri
                 }}
                 style={AddCaptionModalStyle.selectedPhoto}
               />

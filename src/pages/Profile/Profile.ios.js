@@ -1531,10 +1531,9 @@ class Profile extends Component {
   
   render() {
     return (
+      
       <ImageBackground
-        // source={Images.profileBg}
-        style={ProfileStyle.container}
-      >
+        style={ProfileStyle.container}>
         <ScrollView
         contentContainerStyle={{ marginTop: this.state.marginTopConstant }}
         onScroll={({nativeEvent}) => {

@@ -178,14 +178,9 @@ class PostDetails extends Component {
     apiCall("posts/likePost", data, headers)
       .then(response => {
         if (response.status) {
-          // if(this.navigation.state.params.from == 'Home') {
-            // DeviceEventEmitter.emit('refreshHomeFeed', {});
-          // } else if(this.navigation.state.params.from == 'Profile') {
-            // DeviceEventEmitter.emit('refreshProfileFeed', {});
-          // } else {
             DeviceEventEmitter.emit('refreshHomeFeed', {});
             DeviceEventEmitter.emit('refreshProfileFeed', {});
-          // }
+          
         } else {
         }
       })
@@ -518,7 +513,7 @@ class PostDetails extends Component {
               </Text>
             </View>
           </TouchableOpacity>
-          {item.location.title ? item.location.title != "" : item.location.description != "" && (
+          {item.location.title && item.location.title != "" && item.location.description != "" && (
               <Text
                 numberOfLines={2}
                 ellipsizeMode={"tail"}
@@ -719,6 +714,7 @@ class PostDetails extends Component {
   _keyExtractor = (item, index) => item._id;
 
   render() {
+    console.log('POST DETAIL',)
     return (
       <View style={PostDetailsStyle.container}>
         <FlatList

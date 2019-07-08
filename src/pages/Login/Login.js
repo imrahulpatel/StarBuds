@@ -182,6 +182,7 @@ class Login extends Component {
             response => {
               storeUser(response.result);
               console.log(" Login data :",JSON.stringify(response.result, null, 2))
+             
               this.props.setUserData(response.result.user);
               this.props.setToken(response.result.token);
               getData("deviceToken").then(deviceToken => {
@@ -207,7 +208,7 @@ class Login extends Component {
                   if (error.message) {
                     alert("Login Failed", error.message);
                   } else {
-                    //alert("Login Failed", "Someting want to wrong please try again.");
+                    alert("Login Failed", "Someting want to wrong please try again.");
                   }
                 });
               });

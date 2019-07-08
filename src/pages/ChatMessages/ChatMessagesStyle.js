@@ -30,7 +30,7 @@ export const ChatMessagesStyle = {
     },
     captionName: { 
         color:'rgb(13,14,21)',
-        fontFamily:'SourceSansPro-Regular',
+        fontFamily:'SourceSansPro-Bold',
         //marginLeft: 10,
         //fontSize: 13.6,
         //flex: 0.2
@@ -52,6 +52,7 @@ export const ChatMessagesStyle = {
         alignItems:'center',
         marginBottom: 10,
         marginTop:10,
+        paddingHorizontal:12,
         borderRadius: 15
     },
     bubbleImage: {
@@ -62,6 +63,8 @@ export const ChatMessagesStyle = {
     postProfileImage:{ 
         width: screenWidth/12,
         height: screenWidth/12,
+        borderColor : 'rgb(98,206,69)',
+        borderWidth : 1.0,
         borderRadius: screenWidth/12/2
     },
     videoIcon: {

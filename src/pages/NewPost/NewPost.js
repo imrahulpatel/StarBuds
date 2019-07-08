@@ -285,10 +285,10 @@ class NewPost extends Component {
         let isType = this.tempMedias[i].isType ? ( this.tempMedias[i].isType == "camera" ? 1 : (this.tempMedias[i].isType == "image" ? 1 : 2 )) : 1
         console.log('isType', isType)
         this.file["file" + i] = {
-          uri: this.tempMedias[i].uri,
+          uri: this.tempMedias[i].imageUri,
           type: this.tempMedias[i].isType === "video" ? "video/*" : "image/jpeg",
-          name: this.tempMedias[i].uri.substring(
-            this.tempMedias[i].uri.lastIndexOf("/") + 1
+          name: this.tempMedias[i].imageUri.substring(
+            this.tempMedias[i].imageUri.lastIndexOf("/") + 1
           )
          };
         this.medias.push({ mediaType: isType });
@@ -449,7 +449,8 @@ class NewPost extends Component {
 
             )) || (
               <Image
-                source={{ uri: this.state.chooseMultipleImage[0].uri }}
+                source={{ uri: this.state.chooseMultipleImage[0].imageUri}}
+                resizeMode='contain'
                 style={NewPostStyle.selectedPhoto}
               />
             )}
@@ -670,11 +671,13 @@ class NewPost extends Component {
     return (
       <View style={NewPostStyle.container}>
         <ScrollView>
+          
           {this.renderCaptioncontainer()}
           {this.result.length >0 && (this.renderTagPeople()) || null}
           {this.renderAddLocation()}
           {this.state.showLocationsArray && this.renderLocations()}
           {this.renderTurnOffCommenting()}
+
         </ScrollView>
       </View>
     );
