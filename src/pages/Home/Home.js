@@ -20,6 +20,7 @@ import {
   StyleSheet,
   PushNotificationIOS
 } from "react-native";
+import ImageScale from 'react-native-scalable-image';
 import { connect } from "react-redux";
 import { NavigationActions } from "react-navigation";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -757,7 +758,7 @@ v    });
     this.setState({ posts: newPosts });
   }
 
-  renderImage(imageData, resizeMode, taggedPeoples, post, imageIndex) {
+  renderImage1(imageData, resizeMode, taggedPeoples, post, imageIndex) {
     if (taggedPeoples.length > 0) {
       return (
         <CachedImage
@@ -792,6 +793,42 @@ v    });
     }
   }
 
+  renderImage(imageData, resizeMode, taggedPeoples, post, imageIndex) {
+    if (taggedPeoples.length > 0) {
+      return (
+        
+        <ImageScale 
+          key={imageData._id}
+          defaultSource={Images.placeHolder}
+          width={screenWidth}
+          source={{ uri: imageData.mediaUrl,cache: 'only-if-cached'}}
+          
+          >
+         {post.showTag &&
+            this.renderTag(
+              imageData,
+              taggedPeoples,
+              imageIndex ? imageIndex : 0
+            )}
+        </ImageScale>
+
+
+      
+      );
+    } else {
+      return (
+        <ImageScale 
+          key={imageData._id}
+          defaultSource={Images.placeHolder}
+          width={screenWidth}
+          source={{ uri: imageData.mediaUrl }}>
+         
+        </ImageScale>
+        
+      );
+    }
+  }
+
   renderVideo(imageData) {
     return (
       <FeedVideo
@@ -808,15 +845,15 @@ v    });
       if (imageData.mediaType == 1) {
         return (
           <View
-            style={{ height: screenWidth, width: screenWidth }}
-            key={imageData._id}
-          >
+          style={{ height: screenWidth, width: screenWidth }}
+          key={imageData._id}
+            >
             <TouchableWithoutFeedback
               onPress={() => {
                 this.updateTag(postIndex);
               }}
             >
-              {this.renderImage(
+              {this.renderImage1(
                 imageData,
                 "contain",
                 post.taggedPeoples,
@@ -835,9 +872,11 @@ v    });
   renderMedias(post, postIndex) {
     // images, taggedPeoples, postIndex, post
     if (post.medias.length > 1) {
+      
       return (
+         
         <Swiper
-          style={{ height: isIPhoneX() ? screenWidth + 15 : screenHeight / 1.8 + 18 }}
+          style={{ height:isIPhoneX() ? screenWidth + 15 : screenHeight / 1.8 + 18}}
           dot={<View style={Styles.swiperDot} />}
           activeDot={<View style={Styles.activeSwiperDot} />}
           paginationStyle={Styles.swiperPagination}
@@ -891,209 +930,212 @@ v    });
   renderListItem = ({ item, index }) => {
     
      return (
-      <View style={HomeStyle.imageInListContainer}>
-        <View style={HomeStyle.imageTopDetails}>
-          <View style={Styles.profileImageForPostContainerInFeed}>
-            <CachedImage
-              style={Styles.profileImageForPostInFeed}
-              source={{ uri: item.userDetail[0].profileImageUrl }}
-              defaultSource={Images.defaultUser}
-              fallbackSource={Images.defaultUser}
-              activityIndicatorProps={{ display: "none", opacity: 0 }}
-            />
-          </View>
-          <View style={Styles.listItemTitleInFeed}>
-            <TouchableWithoutFeedback onPress={() => this.gotoProfile(item)}>
-              <View>
-                <Text style={Styles.listItemTitleUsernameInFeed}>
-                  {item.userDetail[0].username}
-                </Text>
+      <View style={HomeStyle.rootcontainer}>
+
+          <View style={HomeStyle.imageInListContainer}>
+            <View style={HomeStyle.imageTopDetails}>
+              <View style={Styles.profileImageForPostContainerInFeed}>
+                <CachedImage
+                  style={Styles.profileImageForPostInFeed}
+                  source={{ uri: item.userDetail[0].profileImageUrl }}
+                  defaultSource={Images.defaultUser}
+                  fallbackSource={Images.defaultUser}
+                  activityIndicatorProps={{ display: "none", opacity: 0 }}
+                />
               </View>
-            </TouchableWithoutFeedback>
-            {
-              
-              item.location.title!=null? item.location.title.length > 1 && (
-              <Text
-                numberOfLines={1}
-                ellipsizeMode={"tail"}
-                style={Styles.listItemTitleLocationInFeed}
-              >
-                {item.location.title ? item.location.title : item.location.description}{" "}
-                {(item.location.title || item.location.description) && (
-                  <Image
-                    source={Images.rightArrow}
-                    style={Styles.rightArrowInFeed}
-                  />
-                )}
-              </Text>
-            ):<View></View>}
-          </View>
-          <TouchableOpacity
-            onPress={() => this.openShareOptions(item)}
-            style={Styles.threeHorizontalDotsContainerInFeed}
-          >
-            <Image
-              source={Images.threeHorizontalDots}
-              style={Styles.threeHorizontalDotsInFeed}
-            />
-          </TouchableOpacity>
-        </View>
-        {this.renderMedias(item, index)}
-        <View style={HomeStyle.imageBottomDetailsBottom}>
-          <View style={Styles.feedActionsRowContainer}>
-            <View style={Styles.feedActionLeftContainer}>
-              {!item.likedOrNot && (
-                <TouchableHighlight
-                  onPress={() => this.likePost(index, item)}
-                  underlayColor={"transparent"}
-                  style={Styles.feedActionLikeContainer}
-                >
-                  <Image
-                    style={Styles.unlikeIcon}
-                    source={Images.feedLikeInactive}
-                  />
-                </TouchableHighlight>
-              )}
-              {item.likedOrNot && (
-                <TouchableHighlight
-                  onPress={() => this.disLikePost(index, item)}
-                  underlayColor={"transparent"}
-                  style={Styles.feedActionLikeContainer}
-                >
-                  <Image
-                    style={Styles.likeIcon}
-                    source={Images.feedLikeActive}
-                  />
-                </TouchableHighlight>
-              )}
-              {item.commentFlag && (
-                <TouchableHighlight
-                  onPress={() => this.commentOnPost(item, "comment", index)}
-                  underlayColor={"transparent"}
-                  style={[Styles.feedActionCommentContainer,{right:2}]}
-                >
-                  <Image
-                    style={Styles.commentIcon}
-                    source={Images.feedCommentInactive}
-                  />
-                </TouchableHighlight>
-              )}
+              <View style={Styles.listItemTitleInFeed}>
+                <TouchableWithoutFeedback onPress={() => this.gotoProfile(item)}>
+                  <View>
+                    <Text style={Styles.listItemTitleUsernameInFeed}>
+                      {item.userDetail[0].username}
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+                {
+                  
+                  item.location.title!=null? item.location.title.length > 1 && (
+                  <Text
+                    numberOfLines={1}
+                    ellipsizeMode={"tail"}
+                    style={Styles.listItemTitleLocationInFeed}
+                  >
+                    {item.location.title ? item.location.title : item.location.description}{" "}
+                    {(item.location.title || item.location.description) && (
+                      <Image
+                        source={Images.rightArrow}
+                        style={Styles.rightArrowInFeed}
+                      />
+                    )}
+                  </Text>
+                ):<View></View>}
+              </View>
               <TouchableOpacity
-                onPress={() => this.sharePost(item)}
-                underlayColor={"transparent"}
-                style={Styles.feedActionShareContainer}
+                onPress={() => this.openShareOptions(item)}
+                style={Styles.threeHorizontalDotsContainerInFeed}
               >
                 <Image
-                  style={Styles.shareIcon}
-                  source={Images.forward_N}
+                  source={Images.threeHorizontalDots}
+                  style={Styles.threeHorizontalDotsInFeed}
                 />
               </TouchableOpacity>
             </View>
-            <View style={Styles.feedActionRightContainer}>
-              <Text style={Styles.likeTextInFeed}>
-                {item.totalLikes}
-                {item.totalLikes <= 1 ? " like" : " likes"}
-              </Text>
-              {!item.postSavedOrNot && (
-                <TouchableHighlight
-                  onPress={() => this.savePost(index, item._id)}
-                  underlayColor={"transparent"}
-                  style={Styles.feedActionSaveContainer}
+            {this.renderMedias(item, index)}
+            <View style={HomeStyle.imageBottomDetailsBottom}>
+              <View style={Styles.feedActionsRowContainer}>
+                <View style={Styles.feedActionLeftContainer}>
+                  {!item.likedOrNot && (
+                    <TouchableHighlight
+                      onPress={() => this.likePost(index, item)}
+                      underlayColor={"transparent"}
+                      style={Styles.feedActionLikeContainer}
+                    >
+                      <Image
+                        style={Styles.unlikeIcon}
+                        source={Images.feedLikeInactive}
+                      />
+                    </TouchableHighlight>
+                  )}
+                  {item.likedOrNot && (
+                    <TouchableHighlight
+                      onPress={() => this.disLikePost(index, item)}
+                      underlayColor={"transparent"}
+                      style={Styles.feedActionLikeContainer}
+                    >
+                      <Image
+                        style={Styles.likeIcon}
+                        source={Images.feedLikeActive}
+                      />
+                    </TouchableHighlight>
+                  )}
+                  {item.commentFlag && (
+                    <TouchableHighlight
+                      onPress={() => this.commentOnPost(item, "comment", index)}
+                      underlayColor={"transparent"}
+                      style={[Styles.feedActionCommentContainer,{right:2}]}
+                    >
+                      <Image
+                        style={Styles.commentIcon}
+                        source={Images.feedCommentInactive}
+                      />
+                    </TouchableHighlight>
+                  )}
+                  <TouchableOpacity
+                    onPress={() => this.sharePost(item)}
+                    underlayColor={"transparent"}
+                    style={Styles.feedActionShareContainer}
+                  >
+                    <Image
+                      style={Styles.shareIcon}
+                      source={Images.forward_N}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={Styles.feedActionRightContainer}>
+                  <Text style={Styles.likeTextInFeed}>
+                    {item.totalLikes}
+                    {item.totalLikes <= 1 ? " like" : " likes"}
+                  </Text>
+                  {!item.postSavedOrNot && (
+                    <TouchableHighlight
+                      onPress={() => this.savePost(index, item._id)}
+                      underlayColor={"transparent"}
+                      style={Styles.feedActionSaveContainer}
+                    >
+                      <Image
+                        style={Styles.saveIcon}
+                        source={Images.savePost_icon}
+                      />
+                    </TouchableHighlight>
+                  )}
+                  {item.postSavedOrNot && (
+                    <TouchableHighlight
+                      onPress={() => this.unsavePost(index, item._id)}
+                      underlayColor={"transparent"}
+                      style={Styles.feedActionSaveContainer}
+                    >
+                      <Image
+                        style={Styles.saveDIcon}
+                        source={Images.savePost_icon}
+                      />
+                    </TouchableHighlight>
+                  )}
+                </View>
+              </View>
+              {item.caption.length < 100 && (
+                <Text
+                  style={Styles.usernameBeforeCaptionInFeed}
+                  numberOfLines={5}
+                  ellipsizeMode={"tail"}
                 >
-                  <Image
-                    style={Styles.saveIcon}
-                    source={Images.savePost_icon}
-                  />
-                </TouchableHighlight>
-              )}
-              {item.postSavedOrNot && (
-                <TouchableHighlight
-                  onPress={() => this.unsavePost(index, item._id)}
-                  underlayColor={"transparent"}
-                  style={Styles.feedActionSaveContainer}
-                >
-                  <Image
-                    style={Styles.saveDIcon}
-                    source={Images.savePost_icon}
-                  />
-                </TouchableHighlight>
-              )}
-            </View>
-          </View>
-          {item.caption.length < 100 && (
-            <Text
-              style={Styles.usernameBeforeCaptionInFeed}
-              numberOfLines={5}
-              ellipsizeMode={"tail"}
-            >
-              {item.userDetail[0].username + " "}{" "}
-              {item.caption != "" && (
-                // <Text style={Styles.captionTextInFeed}>{item.caption}</Text>
-                <ParsedText
-                  style={Styles.captionTextInFeed}
-                  parse={
-                    [
-                      { pattern: /@([a-zA-Z0-9.,_]+)(?:^|[ ])/, style: { color: Colors.primary }, onPress: this.handleMentionsUser },
-                      { pattern: /#([a-zA-Z0-9.,_]+)/, style: { color: Colors.primary }, onPress: this.handleHashTag },
-                    ]
-                  }
-                  childrenProps={{allowFontScaling: false}}
-                >
-                 {item.caption}
-                </ParsedText>
-              )}
-            </Text>
-          )}
-          {item.caption.length >= 100 && (
-            <View style={Styles.bigCaptionWrapperInFeed}>
-              <ReadMore
-                numberOfLines={3}
-                renderTruncatedFooter={this._renderTruncatedFooter}
-                renderRevealedFooter={this._renderRevealedFooter}
-              >
-                <Text style={Styles.usernameBeforeCaptionInFeed}>
                   {item.userDetail[0].username + " "}{" "}
                   {item.caption != "" && (
                     // <Text style={Styles.captionTextInFeed}>{item.caption}</Text>
-                     <ParsedText
-                       style={Styles.captionTextInFeed}
-                       parse={
-                         [
-                           { pattern: /@([a-zA-Z0-9.,_]+)(?:^|[ ])/, style: { color: Colors.primary }, onPress: this.handleMentionsUser},
-                           { pattern: /#([a-zA-Z0-9.,_]+)/, style: { color: Colors.primary }, onPress: this.handleHashTag },
-                         ]
-                       }
-                       childrenProps={{ allowFontScaling: false }}
-                     >
-                       {item.caption}
-                     </ParsedText>
+                    <ParsedText
+                      style={Styles.captionTextInFeed}
+                      parse={
+                        [
+                          { pattern: /@([a-zA-Z0-9.,_]+)(?:^|[ ])/, style: { color: Colors.primary }, onPress: this.handleMentionsUser },
+                          { pattern: /#([a-zA-Z0-9.,_]+)/, style: { color: Colors.primary }, onPress: this.handleHashTag },
+                        ]
+                      }
+                      childrenProps={{allowFontScaling: false}}
+                    >
+                    {item.caption}
+                    </ParsedText>
                   )}
                 </Text>
-              </ReadMore>
-            </View>
-          )}
-          {item.commentFlag &&
-            item.totalComments > 0 && (
-              <TouchableHighlight
-                onPress={() => this.commentOnPost(item, "view", index)}
-                underlayColor={"transparent"}
-              >
-                <Text style={Styles.commentTextInFeed}>
-                  View {item.totalComments == 1 ? "" : "all"}{" "}
-                  {item.totalComments}
-                  {item.totalComments == 1 ? " comment" : " comments"}
+              )}
+              {item.caption.length >= 100 && (
+                <View style={Styles.bigCaptionWrapperInFeed}>
+                  <ReadMore
+                    numberOfLines={3}
+                    renderTruncatedFooter={this._renderTruncatedFooter}
+                    renderRevealedFooter={this._renderRevealedFooter}
+                  >
+                    <Text style={Styles.usernameBeforeCaptionInFeed}>
+                      {item.userDetail[0].username + " "}{" "}
+                      {item.caption != "" && (
+                        // <Text style={Styles.captionTextInFeed}>{item.caption}</Text>
+                        <ParsedText
+                          style={Styles.captionTextInFeed}
+                          parse={
+                            [
+                              { pattern: /@([a-zA-Z0-9.,_]+)(?:^|[ ])/, style: { color: Colors.primary }, onPress: this.handleMentionsUser},
+                              { pattern: /#([a-zA-Z0-9.,_]+)/, style: { color: Colors.primary }, onPress: this.handleHashTag },
+                            ]
+                          }
+                          childrenProps={{ allowFontScaling: false }}
+                        >
+                          {item.caption}
+                        </ParsedText>
+                      )}
+                    </Text>
+                  </ReadMore>
+                </View>
+              )}
+              {item.commentFlag &&
+                item.totalComments > 0 && (
+                  <TouchableHighlight
+                    onPress={() => this.commentOnPost(item, "view", index)}
+                    underlayColor={"transparent"}
+                  >
+                    <Text style={Styles.commentTextInFeed}>
+                      View {item.totalComments == 1 ? "" : "all"}{" "}
+                      {item.totalComments}
+                      {item.totalComments == 1 ? " comment" : " comments"}
+                    </Text>
+                  </TouchableHighlight>
+                )}
+              <View style={Styles.durationTextContainerInFeed}>
+                <Icon name="schedule" color={Styles.durationTextInFeed.color} />
+                <Text style={Styles.durationTextInFeed}>
+                  {calculateTimeDuration(item.createdAt)}{" "}
+                  {calculateTimeDuration(item.createdAt) != "now" ? "ago" : ""}
                 </Text>
-              </TouchableHighlight>
-            )}
-          <View style={Styles.durationTextContainerInFeed}>
-            <Icon name="schedule" color={Styles.durationTextInFeed.color} />
-            <Text style={Styles.durationTextInFeed}>
-              {calculateTimeDuration(item.createdAt)}{" "}
-              {calculateTimeDuration(item.createdAt) != "now" ? "ago" : ""}
-            </Text>
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
+      </View> 
     );
   };
 
@@ -1148,11 +1190,7 @@ v    });
   renderEmptyView = () => {
     return (
        <ImageBackground style={HomeStyle.emptyContainer} source={Images.homePlaceHolder}>
-      {/* <ImageBackground
-          style={HomeStyle.imageContainer}
-          source={Images.background_image}
-      ></ImageBackground> */}
-
+   
         <TouchableOpacity
           onPress={() => {
             navigateTo(this.props.navigation, 'AddPhotoModal')
@@ -1184,15 +1222,20 @@ v    });
     return (
       <View
         style={{
-          marginLeft: 2,
-          marginBottom: 2,
-          backgroundColor: 'white',
+          margin: 2,
+          justifyContent: 'center', 
+          alignItems: 'center', 
           width: 80,
           height: 100
         }}>
-       <Image style={{borderRadius: 0,width : 80, height : 80}}
-            source={arrayImages[index]}
-        />
+           <View style={{ flex: 1,justifyContent: 'center',alignItems: 'center' }}>
+          <Image 
+              style={{width : 80, height : 80}}
+              resizeMode='contain'
+              source={arrayImages[index]}
+            />
+            </View>
+        
       </View>
     );
   };
@@ -1203,29 +1246,31 @@ v    });
         {this.state.isProgress && this.renderProgressBar()}
         {this.state.isConnected  && !this.state.isActivityIndicator && (
           <View style={{ flex: 1, backgroundColor: "white" }}>
-          <FlatList
-          data={[{ key: 'Story1' }, { key: 'Story2' }, { key: 'Story3' },{ key: 'Story4' }, { key: 'Story5' }, { key: 'Story6' },{ key: 'Story7' }, { key: 'Story8' }]}
-          renderItem={this._renderItem1234}
-          horizontal={true}
-          showsHorizontalScrollIndicator = {false}
-			  	ItemSeparatorComponent={() => <View style={{margin: 0}}/>}
-          />
-            <FlatList
-              data={this.state.posts}
-              numColumns={1}
-              keyExtractor={this._keyExtractor}
-              renderItem={this.renderListItem}
-              ListFooterComponent={this.renderFooter}
-              ListEmptyComponent={this.renderEmptyView}
-              onEndReachedThreshold={0.1}
-              onEndReached={this.handleLoadMore}
-              onRefresh={this.handleRefresh}
-              refreshing={this.state.refreshing}
-              extraData={this.state}
-              ref={ref => {
-                this.flatListRef = ref;
-              }}
-            />
+              <FlatList
+              style={{paddingBottom:20}}
+              data={[{ key: 'Story1' }, { key: 'Story2' }, { key: 'Story3' },{ key: 'Story4' }, { key: 'Story5' }, { key: 'Story6' },{ key: 'Story7' }, { key: 'Story8' }]}
+              renderItem={this._renderItem1234}
+              horizontal={true}
+              showsHorizontalScrollIndicator = {false}
+              ItemSeparatorComponent={() => <View style={{margin: 0}}/>}
+              />
+
+              <FlatList
+                data={this.state.posts}
+                numColumns={1}
+                keyExtractor={this._keyExtractor}
+                renderItem={this.renderListItem}
+                ListFooterComponent={this.renderFooter}
+                ListEmptyComponent={this.renderEmptyView}
+                onEndReachedThreshold={0.1}
+                onEndReached={this.handleLoadMore}
+                onRefresh={this.handleRefresh}
+                refreshing={this.state.refreshing}
+                extraData={this.state}
+                ref={ref => {
+                  this.flatListRef = ref;
+                }}
+              />
           </View>
         )}
         {this.state.isActivityIndicator && this.renderActivityIndicator()}

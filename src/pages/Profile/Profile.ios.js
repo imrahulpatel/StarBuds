@@ -20,8 +20,8 @@ import {
   RefreshControl,
   Modal,
 } from "react-native";
-import { TabNavigator, NavigationActions } from "react-navigation";
-import { SafeAreaView } from 'react-navigation';
+import { SafeAreaView,TabNavigator, NavigationActions } from "react-navigation";
+
 
 import ActionSheet from 'react-native-actionsheet';
 import { connect } from "react-redux";
@@ -136,6 +136,8 @@ class Profile extends Component {
       this.scrollViewRef.scrollTo({x: 0, y: isIPhoneX() ? -45 : -20, animated: false})
     })
   }
+
+
 
   changeCommentCount(value) {
     value.currentPost.commentCount = value.commentCount;
@@ -661,21 +663,24 @@ class Profile extends Component {
   }
 
   uploadImage(fileToBeUploaded, imagePath) {
+    
     this.setState({ isUploadingProfileImage: true }, () => {
       let data = new FormData();
       data.append("userId", this.props.userData._id);
       data.append("file", fileToBeUploaded);
-      fetch(Metrics.serverUrl + "users/updateUserInformation", {
+      fetch(Metrics.serverUrl + "users/UpdateUserDp", {
         method: "post",
         headers: {
           'Authorization': "Bearer " + this.props.token,
           'userid': this.props.userData._id,
+          'Content-Type': 'multipart/form-data',
         },
         body: data
       })
         .then(response => response.json())
         .then(responseJson => {
-          console.log('Upload IMage response = ', responseJson)
+          console.log('Upload IMage response = ', JSON.stringify(responseJson))
+         // alert(JSON.stringify(responseJson))
           if (responseJson.status) {
             let tempUser = {
               token: this.props.token,
@@ -959,6 +964,7 @@ class Profile extends Component {
                   ? Images.listIconActive
                   : Images.listIcon
               }
+              
               style={ProfileStyle.profileMenuIcon}
             />
           </TouchableHighlight>
@@ -1040,6 +1046,7 @@ class Profile extends Component {
               source={{ uri: item.medias[0].thumbnail }}
               defaultSource={Images.placeHolder}
               fallbackSource={Images.placeHolder}
+              resizeMode={"contain"}
               activityIndicatorProps={{ display: "none", opacity: 0 }}
             />
             <Image source={Images.videoIcon} style={ProfileStyle.videoIcon} />
@@ -1059,6 +1066,7 @@ class Profile extends Component {
                 style={ProfileStyle.imageInGrid}
                 source={{ uri: item.medias[0].thumbnail }}
                 defaultSource={Images.placeHolder}
+                resizeMode={"contain"}
                 activityIndicatorProps={{ display: "none", opacity: 0 }}
               />
               <Image
@@ -1072,6 +1080,7 @@ class Profile extends Component {
               style={ProfileStyle.imageInGrid}
               source={{ uri: item.medias[0].thumbnail }}
               defaultSource={Images.placeHolder}
+              resizeMode={"contain"}
               activityIndicatorProps={{ display: "none", opacity: 0 }}
             />
           )}
@@ -1169,7 +1178,7 @@ class Profile extends Component {
             defaultSource={Images.placeHolder}
             fallbackSource={Images.placeHolder}
             activityIndicatorProps={{ display: "none", opacity: 0 }}
-            resizeMode={"cover"}
+            resizeMode={"contain"}
           />
           {post.showTag && this.renderTag(imageData, post.taggedPeoples, imageIndex ? imageIndex : 0)}
         </View>
@@ -1183,7 +1192,7 @@ class Profile extends Component {
             defaultSource={Images.placeHolder}
             fallbackSource={Images.placeHolder}
             activityIndicatorProps={{ display: "none", opacity: 0 }}
-            resizeMode={"cover"}
+            resizeMode='contain'
           />
         );
     }
@@ -1225,7 +1234,7 @@ class Profile extends Component {
     if (post.medias.length > 1) {
       return (
         <Swiper
-          style={{ height: screenWidth + 12, backgroundColor: "#0a0a0a" }}
+          style={{ height: screenWidth + 12, backgroundColor: "#ffffff" }}
           dot={<View style={Styles.swiperDot} />}
           activeDot={<View style={Styles.activeSwiperDot} />}
           paginationStyle={Styles.swiperPagination}
@@ -1255,7 +1264,8 @@ class Profile extends Component {
 
   renderListItem = ({ item, index }) => {
     return (
-      <View style={ProfileStyle.imageInListContainer} key={item._id}>
+      <View style={ProfileStyle.rootcontainer}>
+        <View style={ProfileStyle.imageInListContainer} key={item._id}>
         <View style={ProfileStyle.imageInListDetail}>
           <View style={Styles.profileImageForPostContainerInFeed}>
             <CachedImage
@@ -1270,9 +1280,10 @@ class Profile extends Component {
             <Text style={Styles.listItemTitleUsernameInFeed}>
               {this.state.userDetail.username}
             </Text>
-            {item.location.title ? item.location.title != "" : item.location.description != "" && (
+            
+            {item.location.title!=null? item.location.title.length > 1 && (
               <Text
-                numberOfLines={2}
+                numberOfLines={1}
                 ellipsizeMode={"tail"}
                 style={Styles.listItemTitleLocationInFeed}
               >
@@ -1284,7 +1295,8 @@ class Profile extends Component {
                   />
                 )}
               </Text>
-            )}
+            ):<View></View>}
+
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -1295,6 +1307,7 @@ class Profile extends Component {
             {!this.state.updatingPost && (
               <Image
                 source={Images.threeHorizontalDots}
+                
                 style={Styles.threeHorizontalDotsInFeed}
               />
             )}
@@ -1461,6 +1474,7 @@ class Profile extends Component {
           </View>
         </View>
       </View>
+      </View>
     );
   };
 
@@ -1473,8 +1487,8 @@ class Profile extends Component {
       >
         <ImageBackground
           source={Images.blurred}
-          style={ProfileStyle.blurredOverlay}
-        >
+          style={ProfileStyle.blurredOverlay}>
+            
           <View style={ProfileStyle.blurredOverlay}>
             {this.renderTitleBar()}
             {this.renderProfileImage()}
@@ -1532,114 +1546,116 @@ class Profile extends Component {
   render() {
     return (
       
-      <ImageBackground
-        style={ProfileStyle.container}>
-        <ScrollView
-        contentContainerStyle={{ marginTop: this.state.marginTopConstant }}
-        onScroll={({nativeEvent}) => {
-          this.setState({ marginTopConstant: isIPhoneX() ? -45 : -20 });
 
-        }}
-        contentOffset = {{x:0, y:0}}
-          refreshControl={
-            <RefreshControl
-              refreshing={
-                this.state.refreshing
-              }
-              onRefresh={this.onPageRefresh.bind(this)}
-              tintColor={Colors.primary}
-              colors={[Colors.primary]}
-            />
-          }
-          ref={ref => {
-            this.scrollViewRef = ref;
+        <ImageBackground style={ProfileStyle.container}>
+          <ScrollView
+          contentContainerStyle={{ marginTop: this.state.marginTopConstant }}
+          onScroll={({nativeEvent}) => {
+            this.setState({ marginTopConstant: isIPhoneX() ? -45 : -20 });
+
           }}
-        >
-          {this.renderHeader()}
-          {this.state.isConnected && !this.state.isLoading &&
-            this.state.gridSelected && (
-              <FlatList
-                data={this.state.posts}
-                numColumns={3}
-                keyExtractor={this._keyExtractor}
-                ListFooterComponent={this.renderFooter}
-                ListEmptyComponent={this.renderEmptyPosts}
-                onEndReachedThreshold={1}
-                scrollEnabled={false}
-                renderItem={this.renderGridItem}
-                extraData={this.state}
-                initialNumToRender={15}
-                removeClippedSubviews={false}
+          contentOffset = {{x:0, y:0}}
+            refreshControl={
+              <RefreshControl
+                refreshing={
+                  this.state.refreshing
+                }
+                onRefresh={this.onPageRefresh.bind(this)}
+                tintColor={Colors.primary}
+                colors={[Colors.primary]}
               />
-            )}
-          {this.state.isConnected && !this.state.isLoading &&
-            this.state.listSelected && (
-              <FlatList
-                data={this.state.posts}
-                numColumns={1}
-                keyExtractor={this._keyExtractor}
-                ListFooterComponent={this.renderFooter}
-                ListEmptyComponent={this.renderEmptyPosts}
-                onEndReachedThreshold={1}
-                renderItem={this.renderListItem}
-                extraData={this.state}
-                removeClippedSubviews={false}
-              />
-            )}
-          {this.state.isLoading && this.renderActivityIndicator()}
-          {!this.state.isConnected && <NoNetworkView containerStyle={ProfileStyle.noNetworkContainer}/>}
-          <SharePostModal 
-            {...this.props} 
-            modalVisible={this.state.modalVisible} 
-            post={this.state.shareInChatPost}
-            toggleModalVisibility={this.toggleModalVisibility} 
-          />
-          <ActionSheet
-            ref={this.getPostOptionsRef}
-            options={options}
-            cancelButtonIndex={CANCEL_INDEX}
-            destructiveButtonIndex={DESTRUCTIVE_INDEX}
-            onPress={this.handlePressOfPostOptions}
-          />
-          <Modal 
-            animationType = {"fade"}
-            transparent = {true}
-            visible = {this.state.isImageEditorOpened}
-            onRequestClose={() => this.setState({ isImageEditorOpened: false })}
-            presentationStyle={'overFullScreen'}
+            }
+            ref={ref => {
+              this.scrollViewRef = ref;
+            }}
           >
-            <View style={{flex: 1, backgroundColor: 'white'}}>
-              <View style={Styles.cropButtonsWrapper}>
-                <Button
-                  onPress={() => {
-                    this.setState({
-                      isImageEditorOpened: false,
-                      imageToBeCropped: ''
-                    })
+            {this.renderHeader()}
+            {this.state.isConnected && !this.state.isLoading &&
+              this.state.gridSelected && (
+                <FlatList
+                  data={this.state.posts}
+                  numColumns={3}
+                  keyExtractor={this._keyExtractor}
+                  ListFooterComponent={this.renderFooter}
+                  ListEmptyComponent={this.renderEmptyPosts}
+                  onEndReachedThreshold={1}
+                  scrollEnabled={false}
+                  renderItem={this.renderGridItem}
+                  extraData={this.state}
+                  initialNumToRender={15}
+                  removeClippedSubviews={false}
+                />
+              )}
+            {this.state.isConnected && !this.state.isLoading &&
+              this.state.listSelected && (
+                <FlatList
+                  data={this.state.posts}
+                  numColumns={1}
+                  keyExtractor={this._keyExtractor}
+                  ListFooterComponent={this.renderFooter}
+                  ListEmptyComponent={this.renderEmptyPosts}
+                  onEndReachedThreshold={1}
+                  renderItem={this.renderListItem}
+                  extraData={this.state}
+                  removeClippedSubviews={false}
+                />
+              )}
+            {this.state.isLoading && this.renderActivityIndicator()}
+            {!this.state.isConnected && <NoNetworkView containerStyle={ProfileStyle.noNetworkContainer}/>}
+            <SharePostModal 
+              {...this.props} 
+              modalVisible={this.state.modalVisible} 
+              post={this.state.shareInChatPost}
+              toggleModalVisibility={this.toggleModalVisibility} 
+            />
+            <ActionSheet
+              ref={this.getPostOptionsRef}
+              options={options}
+              cancelButtonIndex={CANCEL_INDEX}
+              destructiveButtonIndex={DESTRUCTIVE_INDEX}
+              onPress={this.handlePressOfPostOptions}
+            />
+            <Modal 
+              animationType = {"fade"}
+              transparent = {true}
+              visible = {this.state.isImageEditorOpened}
+              onRequestClose={() => this.setState({ isImageEditorOpened: false })}
+              presentationStyle={'overFullScreen'}
+            >
+              <View style={{flex: 1, backgroundColor: 'white'}}>
+                <View style={Styles.cropButtonsWrapper}>
+                  <Button
+                    onPress={() => {
+                      this.setState({
+                        isImageEditorOpened: false,
+                        imageToBeCropped: ''
+                      })
+                    }}
+                    style={Styles.cropCancelButton}
+                  >
+                    <Text style={Styles.cropButtonsText}>Cancel</Text>
+                  </Button>
+                  <Button
+                    onPress={() => this.onCropPress()}
+                    style={Styles.cropDoneButton}
+                  >
+                    <Text style={Styles.cropButtonsText}>Done</Text>
+                  </Button>
+                </View>
+                <ImageCrop
+                  ref={(c) => { this.imageCrop = c; }}
+                  cropWidth={500}
+                  cropHeight={500}
+                  source={{
+                    uri: this.state.imageToBeCropped
                   }}
-                  style={Styles.cropCancelButton}
-                >
-                  <Text style={Styles.cropButtonsText}>Cancel</Text>
-                </Button>
-                <Button
-                  onPress={() => this.onCropPress()}
-                  style={Styles.cropDoneButton}
-                >
-                  <Text style={Styles.cropButtonsText}>Done</Text>
-                </Button>
+                />
               </View>
-              <ImageCrop
-                ref={(c) => { this.imageCrop = c; }}
-                cropWidth={500}
-                cropHeight={500}
-                source={{
-                  uri: this.state.imageToBeCropped
-                }}
-              />
-            </View>
-          </Modal>
-        </ScrollView>
-      </ImageBackground>    
+            </Modal>
+          </ScrollView>
+        </ImageBackground>  
+
+      
     );
   }
 }

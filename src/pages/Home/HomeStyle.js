@@ -68,6 +68,21 @@ export const HomeStyle = {
   imageInListContainer: {
     flexDirection: "column",
     flexWrap: "wrap",
+   
+  },
+  rootcontainer:{
+    shadowRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    backgroundColor:'#ffffff',
+    shadowOpacity: 0.1,
+    shadowColor: '#000000',
+    elevation: 3,
+    borderTopLeftRadius:10,
+    borderTopRightRadius:10,
+    marginTop:14
   },
   imageTopDetails: {
     flex: 0.2,
@@ -75,6 +90,8 @@ export const HomeStyle = {
     alignItems: "center",
     paddingTop: 14,
     paddingBottom: 14,
+    borderTopLeftRadius:10,
+    borderTopRightRadius:10,
     backgroundColor: "white"
   },
   imageBottomDetails: {

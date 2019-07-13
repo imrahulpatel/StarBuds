@@ -205,14 +205,9 @@ class PostDetails extends Component {
     apiCall("posts/dislikePost", data, headers)
       .then(response => {
         if (response.status) {
-          // if(this.navigation.state.params.from == 'Home') {
-            // DeviceEventEmitter.emit('refreshHomeFeed', {});
-          // } else if(this.navigation.state.params.from == 'Profile') {
-            // DeviceEventEmitter.emit('refreshProfileFeed', {});
-          // } else {
             DeviceEventEmitter.emit('refreshHomeFeed', {});
             DeviceEventEmitter.emit('refreshProfileFeed', {});
-          // }
+          
         } else {
         }
       })
@@ -385,7 +380,7 @@ class PostDetails extends Component {
             defaultSource={Images.placeHolder}
             fallbackSource={Images.placeHolder}
             activityIndicatorProps={{ display: "none", opacity: 0 }}
-            resizeMode={"cover"}
+            resizeMode={"contain"}
           />
           {post.showTag && this.renderTag(imageData, post.taggedPeoples, imageIndex ? imageIndex : 0)}
         </View>
@@ -399,7 +394,7 @@ class PostDetails extends Component {
           defaultSource={Images.placeHolder}
           fallbackSource={Images.placeHolder}
           activityIndicatorProps={{ display: "none", opacity: 0 }}
-          resizeMode={"cover"}
+          resizeMode={"contain"}
         />
       );
     }
@@ -513,9 +508,10 @@ class PostDetails extends Component {
               </Text>
             </View>
           </TouchableOpacity>
-          {item.location.title && item.location.title != "" && item.location.description != "" && (
+       
+            {item.location.title!=null? item.location.title.length > 1 && (
               <Text
-                numberOfLines={2}
+                numberOfLines={1}
                 ellipsizeMode={"tail"}
                 style={Styles.listItemTitleLocationInFeed}
               >
@@ -527,7 +523,7 @@ class PostDetails extends Component {
                   />
                 )}
               </Text>
-            )}
+            ):<View></View>}
         </View>
         <TouchableOpacity
           onPress={() => {
@@ -553,9 +549,9 @@ class PostDetails extends Component {
           )}
         </TouchableOpacity>
       </View>
-      {/* <View style={HomeStyle.imageBottomDetailsTop}> */}
+      
       {this.renderMedias(item, index)}
-      {/* </View> */}
+     
       <View style={HomeStyle.imageBottomDetailsBottom}>
         <View style={Styles.feedActionsRowContainer}>
           <View style={Styles.feedActionLeftContainer}>

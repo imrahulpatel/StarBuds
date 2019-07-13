@@ -18,6 +18,7 @@ import {
   PanResponder,
   Alert
 } from 'react-native';
+import GalleryManager from 'react-native-gallery-manager';
 import { connect } from "react-redux";
 import { TabNavigator, NavigationActions } from "react-navigation";
 import VideoPlayer from "react-native-video-player";
@@ -72,8 +73,7 @@ class GalleryView extends Component {
       galleryPermission: false,
       loading: false,
       user: null,
-      albumName: "All Photos",
-      // albumName: "Camera Roll",
+      albumName: "Camera Roll",
       albums: [],
       dropdownVisible: false,
       images: [],
@@ -86,7 +86,7 @@ class GalleryView extends Component {
       getUrlOnTapImage: false,
       imageMode: "contain",
       isScroll: true,
-      cropImageArray: [] //without crops value //crop values
+      cropImageArray: [] 
     };
     this.tempImage = [];
   }
@@ -146,6 +146,11 @@ class GalleryView extends Component {
       nextPressIn: this.nextPressIn,
       nextPressIn: this.nextPressIn,
     });
+    GalleryManager.getAlbums().then((response) => {
+      console.log("Albums :"+JSON.stringify(response,null,2))
+    }).catch((err) => {
+        // no rejects are defined currently on iOS
+    })
   }
   componentDidMount() {
     const user = this.props.userData;
@@ -225,13 +230,14 @@ class GalleryView extends Component {
 
   async reloadAlbums() {
     const newAlbums = await CameraKitGallery.getAlbumsWithThumbnails();
-
+    
     let albums = [];
     for (let name in newAlbums.albums) {
-      
+     
       albums.push(_.get(newAlbums, ["albums", name]));
       
     }
+   
     this.setState({ albums });
   }
 

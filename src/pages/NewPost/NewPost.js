@@ -380,6 +380,7 @@ class NewPost extends Component {
     if (oEvent.lengthComputable) {
       var progress = oEvent.loaded / oEvent.total;
       DeviceEventEmitter.emit("postProgress", progress);
+      
     } else {
       // Unable to compute progress information since the total size is unknown
     }

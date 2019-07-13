@@ -7,6 +7,7 @@ import {
   Image,
   Switch,
     NetInfo,
+    DeviceEventEmitter,
     TouchableWithoutFeedback,
     Platform,
     TextInput,
@@ -15,6 +16,7 @@ import {
 
 } from "react-native";
 import { Button, NoNetworkView, PostOptions } from "./../../components";
+import DateTimePicker from "react-native-modal-datetime-picker";
 import ImageCrop from 'react-native-image-crop';
 import { NavigationActions } from 'react-navigation';
 import { LoginManager } from "react-native-fbsdk";
@@ -57,21 +59,82 @@ const backAction = NavigationActions.back({
 });
 
 class Settings extends Component {
+
+  static navigationOptions = ({ navigation }) => {
+    return {
+    title: "SETTINGS",
+    headerTitleStyle: Styles.headerTitleStyle,
+    headerStyle: Styles.headerStyle,
+    tabBarVisible: true,
+    headerLeft: (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.dispatch(backAction);
+          // navigation.goBack(backAction)
+          // navigation.dispatch({ type: "Tabs"});
+        }}
+        activeOpacity={0.5}
+        style={Styles.headerLeftContainer}
+      >
+        <Image
+          source={Images.backButton}
+          style={[
+            Styles.headerLeftImage,
+            {
+              height: 15,
+              width: 8
+            }
+          ]}
+        />
+      </TouchableOpacity>
+    ),
+    headerRight: (
+      <TouchableOpacity
+        style={Styles.headerRightContainer}
+        onPress={() => {
+          DeviceEventEmitter.emit('updateprofile', true);
+          
+        }}
+       
+      >
+        <Text
+          style={[
+            Styles.headerRightText,
+            {
+              color: navigation.state.params.colorRight,
+              fontFamily: "SourceSansPro-Regular",
+              letterSpacing: 0.8,
+              fontSize: 16,
+              textAlign: "left"
+            }
+          ]}
+        >
+          Done
+        </Text>
+      </TouchableOpacity>
+    ),
+  
+   };
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       notificationStatus: this.props.userData.notificationEnable,
       locationStatue:true,
       isLoading: false,
+      isActivityIndicator:false,
       isUploadingProfileImage: false,
+      isUploadingBasicInfo:false,
       userData : [], // create an empty array
       isConnected: true,
       isImageEditorOpened: false,
       imageToBeCropped: '',
+      showbdaypicker: false,
       u_name:this.props.userData.name,
       u_username:this.props.userData.username,
       u_birthday:this.props.userData.dob,
-      u_city:'',
+      u_city:this.props.userData.city,
 
     };
   }
@@ -84,7 +147,10 @@ class Settings extends Component {
   }
 
   componentWillMount() {
-    console.log('hii');
+    DeviceEventEmitter.addListener("updateprofile", e => {
+      this.savegeneralData();
+    });
+    this.setState({ taggedPeople: this.props.taggedPeople });
     this.setState({
       userData : this.props.navigation.state.params
     });
@@ -99,6 +165,19 @@ class Settings extends Component {
     } else {
       this.setState({ isConnected: false })
     }
+  };
+
+  showDateTimePicker = () => {
+    this.setState({ showbdaypicker: true });
+  };
+
+  hideDateTimePicker = () => {
+    this.setState({ showbdaypicker: false });
+  };
+
+  handleDatePicked = date => {
+    this.setState({ u_birthday: date });
+    this.hideDateTimePicker();
   };
 
   logout() {
@@ -126,6 +205,55 @@ class Settings extends Component {
       { cancelable: false }
     );
   }
+
+ savegeneralData=()=>{
+  
+      this.setState({ isUploadingBasicInfo: true }, () => {
+      let data = {
+        "userId": this.props.userData._id,
+        "username": this.state.u_username,
+        "dob": this.state.u_birthday,
+        "name": this.state.u_name,
+        "city": this.state.u_city
+      }
+      let headers= {
+        'Authorization': "Bearer " + this.props.token,
+        'userid': this.props.userData._id,
+        "Content-Type": "application/json",
+      }
+
+      
+
+      apiCall("users/updateUserInformation", data,headers).then(
+        response => {
+          console.log(" Update Profile Response :",JSON.stringify(response.result, null, 2))
+          let tempUser = {
+            token: this.props.token,
+            user: response.result
+          };
+          storeUser(tempUser);
+          this.props.setUserData(response.result);
+          this.setState({ isUploadingBasicInfo: false }, () => {
+            alert('Success', response.message);
+          });
+          DeviceEventEmitter.emit('refreshProfileFeed');
+        },
+        error => {
+          setTimeout(() => {
+            this.setState({ isUploadingBasicInfo: false });
+            if (error.message) {
+              alert('Failed',error.message);
+            } else {
+              alert('Failed',"Someting want to wrong please try again.");
+            }
+          });
+        }
+      );
+     
+      
+      }); 
+ }
+
   deregisterDevice = (userId) => {
     const data = {
       userId: userId,
@@ -204,9 +332,11 @@ class Settings extends Component {
   }
 
   componentDidMount() {
-    // this.props.navigation.setParams({
-    //   profileImageUrl: this.props.userData.profileImageUrl
-    // });
+    this.props.navigation.setParams({
+       //profileImageUrl: this.props.userData.profileImageUrl
+       update_profile: this.savegeneralData
+     });
+     
   }
 
 
@@ -254,18 +384,43 @@ class Settings extends Component {
                   source={Images.calender}
               />
           </View>
+          <TouchableOpacity activeOpacity={1} style={{flex: 1,width: '90%',marginLeft : 0, height: 70}} onPress={this.showDateTimePicker} >
           <View style={{marginTop : 0, flex: 1, flexDirection: 'column',width: '90%',marginLeft : 0, height: 70, backgroundColor: Colors.clearTransparent}}>
-              <Text style={{fontFamily: 'OpenSans-Bold',fontSize: 12, color : (118, 129, 150)}}>Birthday</Text>
-              <TextInput
-              editable={false}
-          style={{fontFamily: 'SFUIText-Regular',fontSize: 16,marginLeft : 0,marginRight : 0,height: 30, borderColor : rgb(13, 14, 21), borderBottomWidth: 0.3,color : rgb(13, 14, 21)}}
-          onChangeText={(text) => this.setState({u_birthday:text})}
-          value={this.state.u_birthday!=null && this.state.u_birthday?Moment(this.state.u_birthday).format("MMM-DD-YYYY"):''}
-        />
+              
+                <Text style={{fontFamily: 'OpenSans-Bold',fontSize: 12, color : (118, 129, 150)}}>Birthday</Text>
+             
+             
+                <TextInput
+                  editable={false}
+                  style={{fontFamily: 'SFUIText-Regular',fontSize: 16,marginLeft : 0,marginRight : 0,height: 30, borderColor : rgb(13, 14, 21), borderBottomWidth: 0.3,color : rgb(13, 14, 21)}}
+                  onChangeText={(text) => this.setState({u_birthday:text})}
+                  value={this.state.u_birthday!=null && this.state.u_birthday?Moment(this.state.u_birthday).format("MMM-DD-YYYY"):''}
+                />
+             
+
         </View>
+            
+            {this.state.showbdaypicker?
+                
+                <DateTimePicker
+                      isVisible={true}
+                      onConfirm={this.handleDatePicked}
+                      mode={'date'}
+                      onCancel={this.hideDateTimePicker}
+                    />
+                    :<View></View>
+              }
+        
+
+        </TouchableOpacity>
+
+
+        
       </View>
 
-      <View style={{marginTop : 0,flex: 1, flexDirection: 'row', width : '90%'}}>
+     
+
+       <View style={{marginTop : 0,flex: 1, flexDirection: 'row', width : '90%'}}>
           <View style={{marginLeft : 20,marginTop : 10,width: 40, height: 35}}>
               <Image
                   style={{width: 25, height: 25, alignItems : 'center'}}
@@ -280,8 +435,9 @@ class Settings extends Component {
           value={this.state.u_city}
         />
         </View>
-      </View>
+      </View> 
 
+     
 
     </View>
     )
@@ -468,16 +624,18 @@ class Settings extends Component {
       let data = new FormData();
       data.append("userId", this.props.userData._id);
       data.append("file", fileToBeUploaded);
-      fetch(Metrics.serverUrl + "users/updateUserInformation", {
+      fetch(Metrics.serverUrl + "users/UpdateUserDp", {
         method: "post",
         headers: {
           'Authorization': "Bearer " + this.props.token,
           'userid': this.props.userData._id,
+          'Content-Type': 'multipart/form-data',
         },
         body: data
       })
         .then(response => response.json())
         .then(responseJson => {
+          console.log(" Upload Image Reponse :"+JSON.stringify(responseJson,null,2))
           if (responseJson.status) {
             let tempUser = {
               token: this.props.token,
@@ -538,12 +696,18 @@ class Settings extends Component {
   render() {
     return (
       <View style={SettingsStyle.container}>
+
+
+
             
-     <KeyboardAwareScrollView
+        <KeyboardAwareScrollView
+        style={{flex:1,position:'absolute'}}
         keyboardDismissMode="interactive"
         keyboardShouldPersistTaps={"always"}>
 
             {this.renderProfileImage()}
+
+
             {this.renderGeneralData()}
             {this.renderFolowOnFacebook()}
             {this.renderAccountSection()}
@@ -588,66 +752,33 @@ class Settings extends Component {
               />
             </View>
           </Modal>
+          
         </KeyboardAwareScrollView>
+
+        {this.state.isUploadingBasicInfo && this.renderActivityIndicator()}
       </View>
     );
+  }
+
+  renderActivityIndicator () {
+    return (
+      <View  style={{flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "rgba(0,0,0,0.4)"}}>
+          <ActivityIndicator
+            animating
+            size="large"
+            color={Colors.primary}
+          />
+      </View>
+    )
   }
 }
 
 
-Settings.navigationOptions = ({navigation}) => ({
-  title: "SETTINGS",
-  headerTitleStyle: Styles.headerTitleStyle,
-  headerStyle: Styles.headerStyle,
-  tabBarVisible: true,
-  headerLeft: (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.dispatch(backAction);
-        // navigation.goBack(backAction)
-        // navigation.dispatch({ type: "Tabs"});
-      }}
-      activeOpacity={0.5}
-      style={Styles.headerLeftContainer}
-    >
-      <Image
-        source={Images.backButton}
-        style={[
-          Styles.headerLeftImage,
-          {
-            height: 15,
-            width: 8
-          }
-        ]}
-      />
-    </TouchableOpacity>
-  ),
-  headerRight: (
-    <TouchableOpacity
-      style={Styles.headerRightContainer}
-      onPress={() => {
-        navigation.dispatch(backAction);
-        // navigation.goBack(backAction)
-        // navigation.dispatch({ type: "Tabs"});
-      }}
-    >
-      <Text
-        style={[
-          Styles.headerRightText,
-          {
-            color: navigation.state.params.colorRight,
-            fontFamily: "SourceSansPro-Regular",
-            letterSpacing: 0.8,
-            fontSize: 16,
-            textAlign: "left"
-          }
-        ]}
-      >
-        Done
-      </Text>
-    </TouchableOpacity>
-  )}
-  );
+
+
 
 const mapStateToProps = ({ authReducer }) => {
   const { userData, loading, token } = authReducer;

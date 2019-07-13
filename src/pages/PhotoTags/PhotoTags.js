@@ -61,38 +61,7 @@ class PhotoTags extends Component {
     });
     this.setState({ taggedPeople: this.props.taggedPeople });
   }
-  //  componentWillReceiveProps(_data){
-  //
-  //    // received props from TagPeople
-  //    let data = _data.friendList;
-  //    if(data){
-  //      let tempData = {};
-  //      tempData.username = data.username;
-  //      tempData.user = data._id;
-  //      tempData.locationY = this.top;
-  //      tempData.locationX = this.left;
-  //      tempData.mediaNumber = this.lastIndex;
-  //      let tempTaggedPeoples = this.state.taggedPeoplesList;
-  //      //let tempTaggedPeoples = this.props.tagged_peoples_for_display;
-  //
-  //      // IT'S FOR DISPLAY USER ON PHOTO
-  //      tempTaggedPeoples.push(tempData);
-  //      this.props.taggedPeoplesForDisplay(tempTaggedPeoples)
-  //      this.setState({taggedPeoplesList: tempTaggedPeoples });
-  //
-  //      // IT'S FROM COMPAIR TWO ARRAY USER IS TAGGED OR NOT
-  //      this.taggedPeoples.push(data);
-  //      // this.props.taggedPeoplesForCompare(this.taggedPeoples);
-  //    }
-  //  }
-  //
-  //
-  //  componentWillMount () {
-  //   this.taggedPeoples = this.props.tagged_peoples_for_compare;
-  //   this.setState({taggedPeoplesList: this.props.tagged_peoples_for_display});
-  //   this.props.initTransferUtility()
-  // }
-
+  
   imgUrl(url) {
     if (Platform.OS === "android") {
     } else {
@@ -175,11 +144,14 @@ class PhotoTags extends Component {
                     activityIndicatorProps={{ display: "none", opacity: 0 }}
                   />
                 )}
-                {data.uri && (
-                  <Image
-                    style={PhotoTagsStyle.imageContainer}
-                    source={{ uri: data.uri }}
-                  />
+                {data.imageUri && (
+                  
+                    <Image
+                      style={PhotoTagsStyle.imageContainer}
+                      resizeMode='contain'
+                      source={{ uri: data.imageUri}}
+                    />
+                  
                 )}
                 {this.state.taggedPeople &&
                   this.state.taggedPeople.map((dt, subIndex) => {

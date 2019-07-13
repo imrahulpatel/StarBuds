@@ -280,12 +280,27 @@ export const ProfileStyle = {
 		flexDirection: 'column',
 		flexWrap: 'wrap'
 	},
+	rootcontainer:{
+		shadowRadius: 10,
+		shadowOffset: {
+		  width: 0,
+		  height: -3,
+		},
+		shadowOpacity: 0.1,
+		shadowColor: '#000000',
+		elevation: 3,
+		borderTopLeftRadius:10,
+		borderTopRightRadius:10,
+		marginTop:14
+	  },
 	imageInListDetail: {
 		height: (screenHeight / 12),
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingBottom: 5,
-    backgroundColor: "white"
+		borderTopLeftRadius:10,
+		borderTopRightRadius:10,
+        backgroundColor: "white"
 	},
 	profileImageForPostContainer: {
 		flex: 0.15,
@@ -318,8 +333,8 @@ export const ProfileStyle = {
 	},
 	imageInList: {
 		// flex: 0.8,
-		borderColor: 'white',
-		borderWidth: 0.5,
+		//borderColor: 'white',
+		//borderWidth: 0.5,
 		width: (screenWidth - 1),
 		height: (screenWidth - 1),
 		// height: (screenHeight / 2),

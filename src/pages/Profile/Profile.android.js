@@ -616,11 +616,12 @@ class Profile extends Component {
       let data = new FormData();
       data.append("userId", this.props.userData._id);
       data.append("file", fileToBeUploaded);
-      fetch(Metrics.serverUrl + "users/updateUserInformation", {
+      fetch(Metrics.serverUrl + "users/UpdateUserDp", {
         method: "post",
         headers: {
           'Authorization': "Bearer " + this.props.token,
           'userid': this.props.userData._id,
+          'Content-Type': 'multipart/form-data',
         },
         body: data
       })
@@ -1094,7 +1095,7 @@ class Profile extends Component {
             defaultSource={Images.placeHolder}
             fallbackSource={Images.placeHolder}
             activityIndicatorProps={{ display: "none", opacity: 0 }}
-            resizeMode={"cover"}
+            resizeMode={"contain"}
           />
           {post.showTag && this.renderTag(imageData, post.taggedPeoples, imageIndex ? imageIndex : 0)}
         </View>
@@ -1108,7 +1109,7 @@ class Profile extends Component {
             defaultSource={Images.placeHolder}
             fallbackSource={Images.placeHolder}
             activityIndicatorProps={{ display: "none", opacity: 0 }}
-            resizeMode={"cover"}
+            resizeMode={"contain"}
           />
         );
     }

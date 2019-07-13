@@ -148,7 +148,7 @@ export const DiscoveryStyle_New = {
       left: screenWidth * 0.10,
       width : 300, height : 60,
       fontFamily: 'OpenSans-Bold',
-      fontSize: 40,
+      fontSize: 36,
       color :'white'
       },
 

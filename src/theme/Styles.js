@@ -42,13 +42,13 @@ export const Styles = {
   headerTitleStyle: {
     fontSize: 16,
     letterSpacing: 0,
-    paddingRight:10,
     lineHeight:26,
     color: "rgb(216,216,216)",
     fontFamily: "OpenSans-Bold",
     alignSelf: "center",
+    textAlign:'center',
     fontWeight: 'normal'
-    // paddingTop: (Platform.OS === 'ios' && screenHeight === 812) ? 40 : 0
+    
   },
   transparentHeaderStyle: {
     backgroundColor: 'transparent',

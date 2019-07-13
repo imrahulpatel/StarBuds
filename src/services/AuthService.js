@@ -29,7 +29,7 @@ export function apiCall(apiName, data, header) {
                 },
                 body: JSON.stringify(data)
               })
-              .then(response => response.json())
+              .then(response =>response.json())
               .then(responseJson => {
                 if (responseJson.status) {
                   resolve(responseJson);

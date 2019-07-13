@@ -99,87 +99,10 @@ class GalleryView extends Component {
     this.scrollView.setNativeProps({ scrollEnabled: value });
     // this.setState({ isScroll : value});
   }
-  // static navigationOptions = ({ navigation }) => {
-  //   console.log('navigation =', navigation)
-  //   return ({// tabBarIcon: ({ focused }) => {
-  //   //   return (
-  //   //     <Image style={{ width: 20, height: 20 }} source={Images.addPhotoTab} />
-  //   //   );
-  //   // },
-
-  //   title: "GALLERY",
-  //   // title: (
-  //   //   <View style={{ height: 44, width: 200, alignSelf: "center" }}>
-  //   //     <ModalDropdown
-  //   //       options={[
-  //   //         "Camera Roll",
-  //   //         "Favorites",
-  //   //         "Screenshots",
-  //   //         "Recently Deleted"
-  //   //       ]}
-  //   //       defaultValue="Camera Roll"
-  //   //       style={styles.dropdown_1}
-  //   //       dropdownStyle={styles.dropdownStyle}
-  //   //       textStyle={styles.textStyle}
-  //   //       dropdownTextStyle={styles.dropdownTextStyle}
-  //   //       onSelect={(idx, value) => {
-  //   //         navigation.state.params.changeAlbums(value);
-  //   //       }}
-  //   //     />
-  //   //   </View>
-  //   // ),
-  //   headerTitleStyle: Styles.headerTitleStyle,
-  //   headerStyle: Styles.headerStyle,
-  //   headerLeft: (
-  //     <TouchableHighlight
-  //       onPress={() => {
-  //         navigation.goBack(null);
-  //       }}
-  //       style={{ padding: 15 }}
-  //     >
-  //       <Text
-  //         style={{
-  //           color: Colors.white,
-  //           marginLeft: 10,
-  //           fontFamily: "ProximaNova-Light",
-  //           fontSize: 16
-  //         }}
-  //       >
-  //         Cancel
-  //       </Text>
-  //     </TouchableHighlight>
-  //   ),
-  //   headerRight : (
-  //     <TouchableOpacity
-  //       onPress={() => {
-  //         // _this.nextPage()
-  //         navigation.state.params.nextPage();
-  //       }}
-  //       style={Styles.headerRightContainer}
-  //       activeOpacity={0.5}
-  //     >
-  //       <Text
-  //         style={[Styles.headerRightText, navigation.state.params ? (navigation.state.params.enableNext ? GalleryViewStyle.headerRightTextActive : GalleryViewStyle.headerRightText) : GalleryViewStyle.headerRightText]}
-  //       >
-  //         Next
-  //       </Text>
-  //     </TouchableOpacity>
-  //   )
-  //   })
-  // };
-
+  
   componentWillMount() {
     this.getUserPermission();
-    // _checkPermission("photo").then(data => {
-    //   // if(data == 'authorized'){
-    //   //   // this.reloadAlbums()
-    //   // } else {
-    //   //   alert("Please give permission to access your photos from Settings.")
-    //   // }
-    //   setTimeout(() => {
-    //     this.setState({ galleryPermission: true });
-    //   }, 100);
-    // });
+    
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       // onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
@@ -308,14 +231,14 @@ class GalleryView extends Component {
       if (this.state.images.indexOf(selected) < 0) {
         // First time image selected
 
-       if (this.state.images.length >= 5) {
+       /* if (this.state.images.length >= 5) {
         await this.cropImage(); 
         return;
          
-       }
+       } */
 
         if (this.state.selectedImage.length > 0) {
-          await this.cropImage();
+          /* await this.cropImage(); */
           await this.setState({ selectedImagesArray: [] });
         }
         this.setState({
@@ -343,14 +266,14 @@ class GalleryView extends Component {
       console.log("=====file", uri)
       if (this.state.images[selected]) {
         // Crop image
-        if (this.state.selectedImage.length > 0) {
+        /* if (this.state.selectedImage.length > 0) {
           await this.cropImage();
-        }
+        } */
         delete this.state.images[selected];
         let indexOfTappedImage = _.findIndex(
           this.state.selectedImagesArray,
           o => {
-            return o.uri == uri;
+            return o.imageUri == uri;
           }
         );
 
@@ -368,14 +291,15 @@ class GalleryView extends Component {
         }
       } else {
         this.state.images[selected] = true;
-        if (this.state.selectedImage.length > 0) {
+        /* if (this.state.selectedImage.length > 0) {
           await this.cropImage();
-        }
+        } */
         // Get image height and width
         Image.getSize(uri, (width, height) => {
           //update state
           let tempImageArr = {
             uri: uri,
+            imageUri:uri,
             height: height,
             width: width,
             isType: "image"
@@ -511,10 +435,10 @@ class GalleryView extends Component {
                 image={
                   this.state.selectedImagesArray[
                     this.state.selectedImagesArray.length - 1
-                  ].uri
+                  ].imageUri
                   // "http://geekycentral.com/wp-content/uploads/2017/09/react-native.png"
                 }
-                zoom={0}
+                //zoom={0}
                 imageHeight={
                   this.state.selectedImagesArray[
                     this.state.selectedImagesArray.length - 1
@@ -527,10 +451,10 @@ class GalleryView extends Component {
                 }
                 cropWidth={Metrics.screenWidth}
                 cropHeight={Metrics.screenWidth}
-                maxZoom={100}
-                minZoom={0}
-                panToMove={true}
-                pinchToZoom={true}
+                //maxZoom={100}
+               // minZoom={0}
+               // panToMove={true}
+               // pinchToZoom={true}
                 format={"file"}
                 filePath={
                   RNFetchBlob.fs.dirs.DocumentDir +
@@ -542,62 +466,12 @@ class GalleryView extends Component {
                 quality={1}
               />
 
-              {/* <View style={[{ flex: 0.3 }, GalleryViewStyle.imageModeOverlay]}>
-                  <View style={GalleryViewStyle.imageIconOverlay}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        // this.setState({
-                        //   imageMode:
-                        //     this.state.imageMode == "contain"
-                        //       ? "cover"
-                        //       : "contain"
-                        // });
-                        this.cropImage();
-                      }}
-                    >
-                      <Image
-                        source={Images.fullScreen}
-                        style={GalleryViewStyle.imageIcon}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <Image
-                        source={Images.multipleImagesIcon}
-                        style={GalleryViewStyle.imageIcon}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View> */}
+              
             </View>
           )}
         </View>
         <View>
-          {/* <CameraKitGalleryView
-              ref={gallery => {
-                this.gallery = gallery;
-              }}
-              style={{
-                flex: 1,
-                zIndex: 99,
-                height: Metrics.screenHeight,
-                backgroundColor: "#000"
-              }}
-              minimumInteritemSpacing={0}
-              minimumLineSpacing={0}
-              columnCount={4}
-              albumName={this.state.albumName}
-              onTapImage={result => {
-                this.imageTapped(result.nativeEvent.selected);
-              }}
-              selection={{
-                selectedImage: Images.selectedMultipleImages,
-                imageSizeAndroid: "large",
-                overlayColor: "#ecf0f1aa"
-              }}
-              unSelectedImageIcon={Images.unSelectedMultipleImages}
-              imageStrokeColor={"#edeff0"}
-              getUrlOnTapImage={this.state.getUrlOnTapImage}
-            /> */}
+          
           <CameraKitGalleryView
             ref={gallery => {
               this.gallery = gallery;
@@ -626,20 +500,7 @@ class GalleryView extends Component {
             unSelectedImageIcon={Images.unSelectedMultipleImages}
             imageStrokeColor={"#000"}
             imageStrokeColorWidth={0.5}
-            // fileTypeSupport={{
-            //   supportedFileTypes: ["image/jpeg"],
-            //   unsupportedOverlayColor: "#00000055",
-            //   unsupportedImage: require("../images/unsupportedImage.png"),
-            //   //unsupportedText: 'JPEG!!',
-            //   unsupportedTextColor: "#ff0000"
-            // }}
-            // customButtonStyle={{
-            //   image: require("../images/openCamera.png"),
-            //   backgroundColor: "#06c4e9"
-            // }}
-            // onCustomButtonPress={() =>
-            //   this.setState({ shouldRenderCameraScreen: true })
-            // }
+            
           />
         </View>
       </ScrollView>
@@ -648,32 +509,10 @@ class GalleryView extends Component {
 }
   GalleryView.navigationOptions  = ({ navigation }) => {
     return ({// tabBarIcon: ({ focused }) => {
-    //   return (
-    //     <Image style={{ width: 20, height: 20 }} source={Images.addPhotoTab} />
-    //   );
-    // },
+    
 
     title: "GALLERY",
-    // title: (
-    //   <View style={{ height: 44, width: 200, alignSelf: "center" }}>
-    //     <ModalDropdown
-    //       options={[
-    //         "Camera Roll",
-    //         "Favorites",
-    //         "Screenshots",
-    //         "Recently Deleted"
-    //       ]}
-    //       defaultValue="Camera Roll"
-    //       style={styles.dropdown_1}
-    //       dropdownStyle={styles.dropdownStyle}
-    //       textStyle={styles.textStyle}
-    //       dropdownTextStyle={styles.dropdownTextStyle}
-    //       onSelect={(idx, value) => {
-    //         navigation.state.params.changeAlbums(value);
-    //       }}
-    //     />
-    //   </View>
-    // ),
+    
     headerTitleStyle: Styles.headerTitleStyle,
     headerStyle: Styles.headerStyle,
     headerLeft: (

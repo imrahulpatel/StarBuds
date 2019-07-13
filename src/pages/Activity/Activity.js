@@ -360,23 +360,7 @@ class Activity extends Component {
         {this.state.isLoading && this.renderActivityIndicator()}
         {this.state.isConnected && !this.state.isLoading && (
           this.renderEmptyActivity()
-          // <FlatList
-          //   backgroundColor = {Colors.white}
-          //   data={this.state.userActivity}
-          //   numColumns={1}
-          //   keyExtractor={this._keyExtractor}
-          //   renderItem={this.renderListItem}
-          //   ListFooterComponent={this.renderFooter}
-          //   ListEmptyComponent={this.renderEmptyActivity}
-          //   onRefresh={this.handleRefresh}
-          //   refreshing={this.state.refreshing}
-          //   extraData={this.state}
-          //   removeClippedSubviews={false}
-          //   ItemSeparatorComponent={this.renderSeparator}
-          //   onEndReachedThreshold={0.01}
-          //   onEndReached={this.handleLoadMore}
-          // />
-        )}
+          )}
         {!this.state.isConnected && <NoNetworkView />}
       </View>
     );
