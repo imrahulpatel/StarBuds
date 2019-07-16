@@ -1046,7 +1046,6 @@ class Profile extends Component {
               source={{ uri: item.medias[0].thumbnail }}
               defaultSource={Images.placeHolder}
               fallbackSource={Images.placeHolder}
-              resizeMode={"contain"}
               activityIndicatorProps={{ display: "none", opacity: 0 }}
             />
             <Image source={Images.videoIcon} style={ProfileStyle.videoIcon} />
@@ -1066,7 +1065,6 @@ class Profile extends Component {
                 style={ProfileStyle.imageInGrid}
                 source={{ uri: item.medias[0].thumbnail }}
                 defaultSource={Images.placeHolder}
-                resizeMode={"contain"}
                 activityIndicatorProps={{ display: "none", opacity: 0 }}
               />
               <Image
@@ -1080,7 +1078,6 @@ class Profile extends Component {
               style={ProfileStyle.imageInGrid}
               source={{ uri: item.medias[0].thumbnail }}
               defaultSource={Images.placeHolder}
-              resizeMode={"contain"}
               activityIndicatorProps={{ display: "none", opacity: 0 }}
             />
           )}
@@ -1178,7 +1175,7 @@ class Profile extends Component {
             defaultSource={Images.placeHolder}
             fallbackSource={Images.placeHolder}
             activityIndicatorProps={{ display: "none", opacity: 0 }}
-            resizeMode={"contain"}
+            
           />
           {post.showTag && this.renderTag(imageData, post.taggedPeoples, imageIndex ? imageIndex : 0)}
         </View>

@@ -1095,7 +1095,7 @@ class Profile extends Component {
             defaultSource={Images.placeHolder}
             fallbackSource={Images.placeHolder}
             activityIndicatorProps={{ display: "none", opacity: 0 }}
-            resizeMode={"contain"}
+          
           />
           {post.showTag && this.renderTag(imageData, post.taggedPeoples, imageIndex ? imageIndex : 0)}
         </View>
@@ -1109,7 +1109,7 @@ class Profile extends Component {
             defaultSource={Images.placeHolder}
             fallbackSource={Images.placeHolder}
             activityIndicatorProps={{ display: "none", opacity: 0 }}
-            resizeMode={"contain"}
+            
           />
         );
     }

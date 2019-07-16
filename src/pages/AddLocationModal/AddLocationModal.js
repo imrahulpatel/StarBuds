@@ -116,10 +116,11 @@ export default class AddLocationModal extends Component {
     return (
       <GooglePlacesAutocomplete
         placeholder='Find a location'
-        minLength={2}
+        minLength={1}
         autoFocus={false}
         returnKeyType={'search'}
         fetchDetails={true}
+        listViewDisplayed='auto'
         onPress={(data, details = null) => {
           placeData = data;
           placeDetails = details;
@@ -158,8 +159,7 @@ export default class AddLocationModal extends Component {
             width: screenWidth - 26.7,
           }
         }}
-        /* predefinedPlaces={this.props.navigation.state.params.nearByLocations}
-        predefinedPlacesAlwaysVisible={false} */
+       
         currentLocation={false}
         renderLeftButton={() =>
 

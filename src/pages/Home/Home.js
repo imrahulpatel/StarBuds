@@ -758,7 +758,7 @@ v    });
     this.setState({ posts: newPosts });
   }
 
-  renderImage1(imageData, resizeMode, taggedPeoples, post, imageIndex) {
+  renderImage(imageData, resizeMode, taggedPeoples, post, imageIndex) {
     if (taggedPeoples.length > 0) {
       return (
         <CachedImage
@@ -768,7 +768,7 @@ v    });
           defaultSource={Images.placeHolder}
           fallbackSource={Images.placeHolder}
           activityIndicatorProps={{ display: "none", opacity: 0 }}
-          resizeMode={"contain"}
+          resizeMode={"cover"}
         >
           {post.showTag &&
             this.renderTag(
@@ -787,48 +787,12 @@ v    });
           defaultSource={Images.placeHolder}
           fallbackSource={Images.placeHolder}
           activityIndicatorProps={{ display: "none", opacity: 0 }}
-          resizeMode={"contain"}
+          resizeMode={"cover"}
         />
       );
     }
   }
-
-  renderImage(imageData, resizeMode, taggedPeoples, post, imageIndex) {
-    if (taggedPeoples.length > 0) {
-      return (
-        
-        <ImageScale 
-          key={imageData._id}
-          defaultSource={Images.placeHolder}
-          width={screenWidth}
-          source={{ uri: imageData.mediaUrl,cache: 'only-if-cached'}}
-          
-          >
-         {post.showTag &&
-            this.renderTag(
-              imageData,
-              taggedPeoples,
-              imageIndex ? imageIndex : 0
-            )}
-        </ImageScale>
-
-
-      
-      );
-    } else {
-      return (
-        <ImageScale 
-          key={imageData._id}
-          defaultSource={Images.placeHolder}
-          width={screenWidth}
-          source={{ uri: imageData.mediaUrl }}>
-         
-        </ImageScale>
-        
-      );
-    }
-  }
-
+  
   renderVideo(imageData) {
     return (
       <FeedVideo
@@ -845,15 +809,15 @@ v    });
       if (imageData.mediaType == 1) {
         return (
           <View
-          style={{ height: screenWidth, width: screenWidth }}
-          key={imageData._id}
-            >
+            style={{ height: screenWidth, width: screenWidth,alignContent:'center',justifyContent:'center',alignItems:'center' }}
+            key={imageData._id}
+          >
             <TouchableWithoutFeedback
               onPress={() => {
                 this.updateTag(postIndex);
               }}
             >
-              {this.renderImage1(
+              {this.renderImage(
                 imageData,
                 "contain",
                 post.taggedPeoples,
@@ -872,11 +836,9 @@ v    });
   renderMedias(post, postIndex) {
     // images, taggedPeoples, postIndex, post
     if (post.medias.length > 1) {
-      
       return (
-         
         <Swiper
-          style={{ height:isIPhoneX() ? screenWidth + 15 : screenHeight / 1.8 + 18}}
+          style={{ height:screenWidth + 15 }}
           dot={<View style={Styles.swiperDot} />}
           activeDot={<View style={Styles.activeSwiperDot} />}
           paginationStyle={Styles.swiperPagination}
@@ -907,7 +869,6 @@ v    });
       }
     }
   }
-
   handleMentionsUser = (user) => {    
     if (user.replace('@', '').trim() === this.props.userData.username) {
       // Navigate to Profile

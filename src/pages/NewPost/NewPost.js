@@ -281,7 +281,9 @@ class NewPost extends Component {
       console.log("==tempMedia", this.tempMedias)
       this.props.updateLoading(true);
       for (let i = 0; i < this.tempMedias.length; i++) {
-       
+        // let isType = this.tempMedias[i].isType
+        //   ? this.tempMedias[i].isType == "camera" ? 1 : this.tempMedias[i].isType == "image" : 1 ? 2
+        //     : 1;
         let isType = this.tempMedias[i].isType ? ( this.tempMedias[i].isType == "camera" ? 1 : (this.tempMedias[i].isType == "image" ? 1 : 2 )) : 1
         console.log('isType', isType)
         this.file["file" + i] = {
@@ -290,7 +292,10 @@ class NewPost extends Component {
           name: this.tempMedias[i].imageUri.substring(
             this.tempMedias[i].imageUri.lastIndexOf("/") + 1
           )
-         };
+          // name: this.tempMedias[i].name
+          //   ? this.tempMedias[i].name
+          //   : this.tempMedias[i].isType === "video" ? urlstr.substring(urlstr.lastIndexOf('/')+1) :urlstr.substring(urlstr.lastIndexOf('/')+1);
+        };
         this.medias.push({ mediaType: isType });
       }
       console.log("file ", this.file)
@@ -450,10 +455,9 @@ class NewPost extends Component {
 
             )) || (
               <Image
-                source={{ uri: this.state.chooseMultipleImage[0].imageUri}}
-                resizeMode='contain'
-                style={NewPostStyle.selectedPhoto}
-              />
+              source={{ uri: this.state.chooseMultipleImage[0].imageUri }}
+              style={NewPostStyle.selectedPhoto}
+            />
             )}
           </View>
         </View>

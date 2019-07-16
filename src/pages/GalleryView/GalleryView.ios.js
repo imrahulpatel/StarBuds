@@ -18,11 +18,10 @@ import {
   PanResponder,
   Alert
 } from 'react-native';
-import GalleryManager from 'react-native-gallery-manager';
 import { connect } from "react-redux";
 import { TabNavigator, NavigationActions } from "react-navigation";
 import VideoPlayer from "react-native-video-player";
-import FImage from "../../components/customeview/FullWidthImage";
+
 import {
   CameraKitGallery,
   CameraKitGalleryView
@@ -73,6 +72,7 @@ class GalleryView extends Component {
       galleryPermission: false,
       loading: false,
       user: null,
+      //albumName: "All Photos",
       albumName: "Camera Roll",
       albums: [],
       dropdownVisible: false,
@@ -86,7 +86,7 @@ class GalleryView extends Component {
       getUrlOnTapImage: false,
       imageMode: "contain",
       isScroll: true,
-      cropImageArray: [] 
+      cropImageArray: [] //without crops value //crop values
     };
     this.tempImage = [];
   }
@@ -134,23 +134,19 @@ class GalleryView extends Component {
   componentWillMount() {
     this.getUserPermission();
     this.panResponder = PanResponder.create({
+
       onStartShouldSetPanResponder: (evt, gestureState) => true,
-    
+   
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
-    
+     
       onPanResponderTerminationRequest: (evt, gestureState) => false
-      
+     
     });
     this.props.navigation.setParams({
       enableNext: false,
       nextPressIn: this.nextPressIn,
       nextPressIn: this.nextPressIn,
     });
-    GalleryManager.getAlbums().then((response) => {
-      console.log("Albums :"+JSON.stringify(response,null,2))
-    }).catch((err) => {
-        // no rejects are defined currently on iOS
-    })
   }
   componentDidMount() {
     const user = this.props.userData;
@@ -230,14 +226,10 @@ class GalleryView extends Component {
 
   async reloadAlbums() {
     const newAlbums = await CameraKitGallery.getAlbumsWithThumbnails();
-    
     let albums = [];
     for (let name in newAlbums.albums) {
-     
       albums.push(_.get(newAlbums, ["albums", name]));
-      
     }
-   
     this.setState({ albums });
   }
 
@@ -245,16 +237,15 @@ class GalleryView extends Component {
     if (this.state.selectedImages.length > 0) {
       if (this.isNavigateToGallery){
         this.isNavigateToGallery = false;
-        // await this.cropImage();
-        console.log(' this.state.selectedImages ',  this.state.selectedImages.length)
+       
+        console.log(' this.state.selectedImages',  this.state.selectedImages)
         navigateTo(this.props.navigation, 'NewPost', {
           images: this.state.selectedImages
         });
-        // this.props.navigation.dispatch({ type: 'NewPost', images: this.state.selectedImages})
-
+       
         this.props.setTaggedPeople([]);
         this.props.setTaggedPeopleForCompare([]);
-        // // this.props.navigation.dispatch({ type: 'PhotoTags', params: this.tempImage})
+      
         setTimeout(() => {
           this.isNavigateToGallery = true;
         }, 2000);
@@ -268,17 +259,26 @@ class GalleryView extends Component {
   }
 
   tabAction(navigation) {
-    
+    // @ This is old code
+
+    // let user = this.state.user;
+    // this.props.navigation.dispatch({
+    //   type: "Tabs",
+    //   params: this.props.userData
+    // });
+    // navigation.setParams(this.props.userData)
     navigation.goBack(null);
-    
   }
 
   async onTapImage(event) {
     const isSelected = event.nativeEvent.isSelected;
     const image = await CameraKitGallery.getImageForTapEvent(event.nativeEvent);
-    /* if (this.state.selectedImages.length > 0) {
-     await this.cropImage()
-    } */
+    
+    
+    if (this.state.selectedImages.length > 0) {
+      await this.cropImage()
+     }
+    
     if (
       !isSelected ||
       _.get(image, "selectedImageId") ===
@@ -291,9 +291,6 @@ class GalleryView extends Component {
         return o.selectedImageId == image.selectedImageId
       })
       this.setState({
-        presentedImage: this.state.selectedImagesArray[
-          this.state.selectedImagesArray.length - 1
-        ],
         selectedImagesArray: JSON.parse(JSON.stringify(this.state.selectedImagesArray)),
         selectedImages: JSON.parse(JSON.stringify(this.state.selectedImages)) 
       }, () => {
@@ -303,9 +300,6 @@ class GalleryView extends Component {
       });
     } else if (image) {
       this.setState({
-        presentedImage: this.state.selectedImagesArray[
-          this.state.selectedImagesArray.length - 1
-        ],
         selectedImagesArray: _.concat(this.state.selectedImagesArray, JSON.parse(JSON.stringify(image))),
         selectedImages: _.concat(this.state.selectedImages, JSON.parse(JSON.stringify(image)))
       }, () => {
@@ -316,22 +310,22 @@ class GalleryView extends Component {
     }
   }
 
-  /*
- @cropImage
- cropping selected image.
-*/
+ 
   cropImage() {
     console.log('cropImage', this.state.selectedImages)
     if (this.state.selectedImages[this.state.selectedImages.length - 1].isType == 'image'){
       return this.refs.cropper.crop().then(
         img => {
-          this.state.selectedImages[this.state.selectedImages.length - 1]['uri'] = img;
+          this.state.selectedImages[this.state.selectedImages.length - 1]['imageUri'] = img;
           return img;
         },
-        err => { }
+        err => {
+          
+         }
       );
     } else{
-      this.state.selectedImages[this.state.selectedImages.length - 1].uri = this.state.selectedImages[this.state.selectedImages.length - 1].imageUri;
+      
+      this.state.selectedImages[this.state.selectedImages.length - 1].uri = this.state.selectedImagesArray[this.state.selectedImagesArray.length - 1].imageUri;
       return true
     }
     
@@ -342,24 +336,7 @@ class GalleryView extends Component {
     this.reloadAlbums();
   }
 
-  renderPresentedImage() {
-    return (
-      <View style={{ position: 'absolute', width, height, backgroundColor: 'green' }}>
-        <View style={styles.container}>
-          <Image
-            resizeMode={Image.resizeMode.cover}
-            style={{ width: 300, height: 300 }}
-            source={{ uri: this.state.presentedImage.imageUri }}
-          />
-
-          <Button
-            title={'Back'}
-            onPress={() => this.setState({ showPresentedImage: false })}
-          />
-        </View>
-      </View>
-    )
-  }
+  
 
   render() {
     if (this.props.permissions.photo.status != "authorized") {
@@ -394,18 +371,15 @@ class GalleryView extends Component {
                 this.state.selectedImagesArray[
                   this.state.selectedImagesArray.length - 1
                 ].isType == 'image' && (
-                  
-                <View style={styles.container}>
-                     <ImageCrop
+                  <ImageCrop
                     changeScrollValue={this.changeScrollValue}
                     ref={"cropper"}
                     image={
                       this.state.selectedImagesArray[
                         this.state.selectedImagesArray.length - 1
                       ].imageUri
-                      //"http://geekycentral.com/wp-content/uploads/2017/09/react-native.png"
                     }
-                    //zoom={0}
+                    zoom={0}
                     imageHeight={
                       this.state.selectedImagesArray[
                         this.state.selectedImagesArray.length - 1
@@ -418,10 +392,10 @@ class GalleryView extends Component {
                     }
                     cropWidth={Metrics.screenWidth}
                     cropHeight={Metrics.screenWidth}
-                    //maxZoom={100}
-                    //minZoom={0}
-                    //panToMove={true}
-                    //pinchToZoom={true}
+                    maxZoom={100}
+                    minZoom={0}
+                    panToMove={true}
+                    pinchToZoom={true}
                     format={"file"}
                     filePath={
                       RNFetchBlob.fs.dirs.DocumentDir +
@@ -431,8 +405,7 @@ class GalleryView extends Component {
                     }
                     pixelRatio={1}
                     quality={1}
-                  /> 
-                  </View>
+                  />
                 ) || (
                   <VideoPlayer
                     endWithThumbnail
@@ -455,7 +428,6 @@ class GalleryView extends Component {
           )}
         </View>
 
-       
         <CameraKitGalleryView
           style={{
             flex: 1,
@@ -479,7 +451,7 @@ class GalleryView extends Component {
           unSelectedImageIcon={Images.unSelectedMultipleImages}
           imageStrokeColor={"#ffffff"}
           imageStrokeColorWidth={0.5}
-          remoteDownloadIndicatorType={'progress-pie'}
+          remoteDownloadIndicatorType={'progress-pie'} //spinner / progress-bar / progress-pie
           remoteDownloadIndicatorColor={'white'}
         />
       </ScrollView>
@@ -487,9 +459,33 @@ class GalleryView extends Component {
   }
 }
   GalleryView.navigationOptions  = ({ navigation }) => {
-    return ({
+    return ({// tabBarIcon: ({ focused }) => {
+    //   return (
+    //     <Image style={{ width: 20, height: 20 }} source={Images.addPhotoTab} />
+    //   );
+    // },
+
     title: "GALLERY",
-    
+    // title: (
+    //   <View style={{ height: 44, width: 200, alignSelf: "center" }}>
+    //     <ModalDropdown
+    //       options={[
+    //         "Camera Roll",
+    //         "Favorites",
+    //         "Screenshots",
+    //         "Recently Deleted"
+    //       ]}
+    //       defaultValue="Camera Roll"
+    //       style={styles.dropdown_1}
+    //       dropdownStyle={styles.dropdownStyle}
+    //       textStyle={styles.textStyle}
+    //       dropdownTextStyle={styles.dropdownTextStyle}
+    //       onSelect={(idx, value) => {
+    //         navigation.state.params.changeAlbums(value);
+    //       }}
+    //     />
+    //   </View>
+    // ),
     headerTitleStyle: Styles.headerTitleStyle,
     headerStyle: Styles.headerStyle,
     headerLeft: (
@@ -503,12 +499,22 @@ class GalleryView extends Component {
           source={Images.backButton}
           style={[Styles.headerLeftImage, { height: 15, width: 8 }]}
         />
-        
+        {/* <Text
+          style={{
+            color: Colors.white,
+            marginLeft: 10,
+            fontFamily: "ProximaNova-Light",
+            fontSize: 16
+          }}
+        >
+          Cancel
+        </Text> */}
       </TouchableOpacity>
     ),
     headerRight : (
       <TouchableOpacity
         onPress={() => {
+          // _this.nextPage()
           navigation.state.params.enableNext ? navigation.state.params.nextPage() : null;
         }}
         style={Styles.headerRightContainer}

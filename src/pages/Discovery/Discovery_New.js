@@ -1569,7 +1569,7 @@ newTestCool(index){
   }
 
 
-myCustomAnimatedValue = new Animated.Value(3);
+myCustomAnimatedValue = new Animated.Value(0);
 
 getPageTransformStyle = index => ({
 
@@ -1592,19 +1592,18 @@ getPageTransformStyle = index => ({
           :
 
         <ParallaxSwiper
-        speed={0.22}
-        animatedValue={this.myCustomAnimatedValue}
-        dividerWidth={0}
-        dividerColor="black"
-        backgroundColor= {Colors.clearTransparent}
-        onMomentumScrollEnd={activePageIndex => 
-          this.newTestCool(activePageIndex)
-        }
-        scrollToIndex = {this.state.indexOfScroll}
-        showProgressBar={false}
-        progressBarBackgroundColor="rgba(0,0,0,0.25)"
-        progressBarValueBackgroundColor="white"
-      >
+            speed={0.10}
+            animatedValue={this.myCustomAnimatedValue}
+            dividerWidth={0}
+            dividerColor="black"
+            backgroundColor= {Colors.clearTransparent}
+            onMomentumScrollEnd={activePageIndex => 
+              this.newTestCool(activePageIndex)
+            }
+            scrollToIndex = {this.state.indexOfScroll}
+            showProgressBar={false}
+            progressBarBackgroundColor="rgba(0,0,0,0.25)"
+            progressBarValueBackgroundColor="white">
       
         <ParallaxSwiperPage
           BackgroundComponent={
@@ -1613,12 +1612,11 @@ getPageTransformStyle = index => ({
               source={Images.Savita_D}
             />
           }
+
           ForegroundComponent={
             
               <View style={DiscoveryStyle_New.slide1}>
                    <ScrollView
-                      ////keyboardDismissMode="interactive"
-                      //keyboardShouldPersistTaps={"always"}
                       bounces = {false}
                       ref='_scrollView'
                       contentInsetAdjustmentBehavior = {'always'}

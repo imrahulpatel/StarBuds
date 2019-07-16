@@ -379,8 +379,9 @@ class PostDetails extends Component {
             source={{ uri: imageData.mediaUrl }}
             defaultSource={Images.placeHolder}
             fallbackSource={Images.placeHolder}
+            resizeMode={"cover"}
             activityIndicatorProps={{ display: "none", opacity: 0 }}
-            resizeMode={"contain"}
+            
           />
           {post.showTag && this.renderTag(imageData, post.taggedPeoples, imageIndex ? imageIndex : 0)}
         </View>
@@ -394,7 +395,7 @@ class PostDetails extends Component {
           defaultSource={Images.placeHolder}
           fallbackSource={Images.placeHolder}
           activityIndicatorProps={{ display: "none", opacity: 0 }}
-          resizeMode={"contain"}
+          
         />
       );
     }
@@ -434,7 +435,7 @@ class PostDetails extends Component {
     if (post.medias.length > 1) {
       return (
         <Swiper
-          style={{ height: screenHeight/1.8+(18) }}
+          style={{ height: screenWidth+15}}
           dot={<View style={Styles.swiperDot} />}
           activeDot={<View style={Styles.activeSwiperDot} />}
           paginationStyle={Styles.swiperPagination}
